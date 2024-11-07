@@ -1,4 +1,4 @@
-# RideXExpress Project
+# SpendSmart Project
 
 ## Introduction
 
@@ -11,7 +11,7 @@
   - Mapbox
   - NextAuth
   - Shadcn/ui
-  - hugeicons
+  - lucide-react
   - Logoipsum
 - Back-end
   - Hono
