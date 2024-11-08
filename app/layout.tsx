@@ -20,7 +20,7 @@ const MainLayout = async ({
 }>) => {
   const session = await auth();
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning={true}>
       <SessionProvider session={session}>
         <body className="antialiased">
           {children}

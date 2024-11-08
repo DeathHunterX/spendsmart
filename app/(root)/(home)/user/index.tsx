@@ -1,12 +1,14 @@
 import { signOut } from "@/auth";
 import { Button } from "@/components/ui/button";
 import ROUTES from "@/constants/routes";
+import LeftSideBar from "@/components/shared/sidebar/LeftSideBar";
 
 import React from "react";
 
 const UserHomePage = () => {
   return (
     <div>
+      <LeftSideBar />
       <h3>UserHomePage</h3>
 
       <form
