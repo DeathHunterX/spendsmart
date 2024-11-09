@@ -40,7 +40,7 @@ const SignInPage = () => {
         </div>
       </div>
       <div className="hidden h-full items-center justify-center bg-blue-600 lg:flex">
-        <Image src="/logo.svg" width={100} height={100} alt="logo" />
+        <Image src="/logo-white.svg" width={100} height={100} alt="logo" />
       </div>
     </div>
   );
