@@ -1,16 +1,15 @@
 import React from "react";
-import GuestHomePage from "./guest";
-import UserHomePage from "./user";
 import { auth } from "@/auth";
+import { redirect } from "next/navigation";
 
 const Homepage = async () => {
   const session = await auth();
 
   if (session) {
-    return <UserHomePage />;
-  } else {
-    return <GuestHomePage />;
+    redirect("/dashboard");
   }
+
+  return <div className="">GuestHomePage</div>;
 };
 
 export default Homepage;
