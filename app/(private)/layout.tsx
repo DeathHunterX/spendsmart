@@ -23,6 +23,7 @@ const PrivateLayout = ({ children }: { children: React.ReactNode }) => {
   if (!mounted) {
     return null; // or a loading skeleton
   }
+
   return (
     <div className="relative">
       <SidebarProvider>

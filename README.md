@@ -30,11 +30,53 @@
   - Node.js
   - Drizzle
 - Database
-  - Supabase
+  - Neon
 
 ## Project Structure
 
 ## Installation
+
+Follow these steps to set up the project locally:
+
+1. **Clone the Repository:**
+
+```bash
+  git clone https://github.com/DeathHunterX/spendsmart
+  cd spebdsnart
+
+```
+
+2. **Initialize the libraries installation:**
+
+- For npm:
+
+```bash
+  npm insall --force
+  #or
+  npm install --legacy-peer-deps
+```
+
+- For bun:
+
+```bash
+  bun install
+```
+
+3. **Run the App:**
+   <br />Start the development server
+
+```bash
+  npm run dev
+```
+
+- For bun
+
+```bash
+  bun run dev
+```
+
+4: **Access the App:**
+<br />Open your web browser and go to http://localhost:3000
 
 ## Usage
 
