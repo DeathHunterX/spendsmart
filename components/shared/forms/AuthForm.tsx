@@ -22,7 +22,11 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import ROUTES from "@/constants/routes";
+
+import { toast } from "@/hooks/use-toast";
+import { cn } from "@/lib/utils";
+import { login, register } from "@/actions/user.action";
+import { AUTH_ROUTES } from "@/constants/routes";
 
 interface AuthFormProps<T extends FieldValues> {
   schema: ZodType<T>;
@@ -42,8 +46,34 @@ const AuthForm = <T extends FieldValues>({
     defaultValues: defaultValues as DefaultValues<T>,
   });
 
-  const handleSubmit: SubmitHandler<T> = async () => {
+  const handleSubmit: SubmitHandler<T> = async (values: any) => {
     // TODO: Authenticate User
+    if (formType === "SIGN_IN") {
+      const res = await login(values);
+      console.log(res);
+      // if (res.success || res.status === 201) {
+      //   toast({
+      //     className: cn(
+      //       "top-0 right-0 flex fixed md:max-w-[420px] md:top-4 md:right-4"
+      //     ),
+      //     variant: "default",
+      //     title: "Sign in",
+      //     description: res.message,
+      //   });
+      // }
+    } else if (formType === "SIGN_UP") {
+      const res = await register(values);
+      if (res.success || res.status === 201) {
+        toast({
+          className: cn(
+            "top-0 right-0 flex fixed md:max-w-[420px] md:top-4 md:right-4"
+          ),
+          variant: "default",
+          title: "Sign up",
+          description: res.message,
+        });
+      }
+    }
   };
 
   const buttonText = formType === "SIGN_IN" ? "Sign In" : "Sign Up";
@@ -95,14 +125,14 @@ const AuthForm = <T extends FieldValues>({
         {formType === "SIGN_IN" ? (
           <p className="text-sm leading-relaxed">
             Not registered yet?{" "}
-            <Link href={ROUTES.SIGN_UP} className="paragraph-semibold">
+            <Link href={AUTH_ROUTES.SIGN_UP} className="paragraph-semibold">
               Create an Account
             </Link>
           </p>
         ) : (
           <p className="text-sm leading-relaxed">
             Already have an account?{" "}
-            <Link href={ROUTES.SIGN_IN} className="paragraph-semibold">
+            <Link href={AUTH_ROUTES.SIGN_IN} className="paragraph-semibold">
               Sign in
             </Link>
           </p>

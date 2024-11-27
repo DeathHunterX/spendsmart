@@ -10,7 +10,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import ROUTES from "@/constants/routes";
+import { AUTH_ROUTES } from "@/constants/routes";
 // import NavLinks from "./NavLinks";
 import NavbarLogo from "./Logo";
 import NavLinks from "./NavLinks";
@@ -39,7 +39,7 @@ const MobileNavigation = () => {
           <SheetFooter>
             <div className="flex flex-col gap-3 ">
               <SheetClose asChild>
-                <Link href={ROUTES.SIGN_IN}>
+                <Link href={AUTH_ROUTES.SIGN_IN}>
                   <Button className="btn-outline no-focus min-h-[41px] w-full px-4 py-3">
                     Sign In
                   </Button>
@@ -47,7 +47,7 @@ const MobileNavigation = () => {
               </SheetClose>
 
               <SheetClose asChild>
-                <Link href={ROUTES.SIGN_UP}>
+                <Link href={AUTH_ROUTES.SIGN_UP}>
                   <Button className="btn no-focus min-h-[41px] w-full border px-4 py-3">
                     Sign Up
                   </Button>

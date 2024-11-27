@@ -4,17 +4,17 @@ import Image from "next/image";
 import { signIn } from "next-auth/react";
 import React from "react";
 
-import ROUTES from "@/constants/routes";
 import { toast } from "@/hooks/use-toast";
 
 import { Button } from "@/components/ui/button";
+import { DEFAULT_LOGIN_REDIRECT } from "@/constants/routes";
 
 const SocialAuthForm = () => {
   const handleSignIn = async (provider: "github" | "google") => {
     try {
       await signIn(provider, {
-        callbackUrl: ROUTES.HOME,
         redirect: false,
+        redirectTo: DEFAULT_LOGIN_REDIRECT,
       });
     } catch (error) {
       console.log(error);

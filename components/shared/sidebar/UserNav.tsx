@@ -11,7 +11,7 @@ import {
   // DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import ROUTES from "@/constants/routes";
+import { AUTH_ROUTES } from "@/constants/routes";
 import { BadgeCheck, Bell, CreditCard, LogOut } from "lucide-react";
 import { signOut, useSession } from "next-auth/react";
 const UserNav = () => {
@@ -77,7 +77,7 @@ const UserNav = () => {
           <DropdownMenuSeparator />
           <DropdownMenuItem
             onClick={() => {
-              signOut({ redirectTo: ROUTES.SIGN_IN });
+              signOut({ redirectTo: AUTH_ROUTES.SIGN_IN });
             }}
           >
             <LogOut />

@@ -34,7 +34,6 @@ const SignUpPage = () => {
                 formType="SIGN_UP"
                 schema={SignUpSchema}
                 defaultValues={{
-                  username: "",
                   name: "",
                   email: "",
                   password: "",

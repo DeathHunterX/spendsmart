@@ -4,6 +4,7 @@ import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 import { SessionProvider } from "next-auth/react";
 import { auth } from "@/auth";
+import { QueryProviders } from "@/providers/query-provider";
 
 export const metadata: Metadata = {
   title: "SpendSmart",
@@ -23,7 +24,7 @@ const MainLayout = async ({
     <html lang="en" suppressHydrationWarning={true}>
       <SessionProvider session={session}>
         <body className="antialiased">
-          {children}
+          <QueryProviders>{children}</QueryProviders>
           <Toaster />
         </body>
       </SessionProvider>
