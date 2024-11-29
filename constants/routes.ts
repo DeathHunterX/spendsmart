@@ -9,6 +9,8 @@ export const publicRoutes: Array<string> = [
   "/about",
   "/contact",
   "/service",
+  "/sign-in",
+  "/sign-up",
 ];
 
 /**
@@ -16,12 +18,7 @@ export const publicRoutes: Array<string> = [
  * These routes will direct logged in users to /dashboard
  * @type {string[]}
  */
-export const authRoutes: Array<string> = [
-  "/sign-in",
-  "sign-up",
-  "/dashboard",
-  "net-worth",
-];
+export const authRoutes: Array<string> = ["/dashboard", "net-worth"];
 
 /**
  * The prefix for API authentication routes
