@@ -1,25 +1,14 @@
 import {
   pgTable,
   text,
-  boolean,
   integer,
-  timestamp,
   primaryKey,
+  timestamp,
 } from "drizzle-orm/pg-core";
 import type { AdapterAccountType } from "next-auth/adapters";
-
 import { v7 as uuidv7 } from "uuid";
 
-export const users = pgTable("user", {
-  id: text("id")
-    .primaryKey()
-    .$defaultFn(() => uuidv7()),
-  name: text("name"),
-  email: text("email").unique(),
-  password: text("password"),
-  emailVerified: timestamp("emailVerified", { mode: "date" }),
-  image: text("image"),
-});
+import { users } from "./userSchema";
 
 export const accounts = pgTable(
   "account",
@@ -45,45 +34,17 @@ export const accounts = pgTable(
   })
 );
 
-export const sessions = pgTable("session", {
-  sessionToken: text("sessionToken").primaryKey(),
-  userId: text("userId")
-    .notNull()
-    .references(() => users.id, { onDelete: "cascade" }),
-  expires: timestamp("expires", { mode: "date" }).notNull(),
-});
-
 export const verificationTokens = pgTable(
   "verificationToken",
   {
-    identifier: text("identifier").notNull(),
+    id: text("id").$defaultFn(() => uuidv7()),
+    email: text("email").notNull(),
     token: text("token").notNull(),
     expires: timestamp("expires", { mode: "date" }).notNull(),
   },
   (verificationToken) => ({
     compositePk: primaryKey({
-      columns: [verificationToken.identifier, verificationToken.token],
-    }),
-  })
-);
-
-export const authenticators = pgTable(
-  "authenticator",
-  {
-    credentialID: text("credentialID").notNull().unique(),
-    userId: text("userId")
-      .notNull()
-      .references(() => users.id, { onDelete: "cascade" }),
-    providerAccountId: text("providerAccountId").notNull(),
-    credentialPublicKey: text("credentialPublicKey").notNull(),
-    counter: integer("counter").notNull(),
-    credentialDeviceType: text("credentialDeviceType").notNull(),
-    credentialBackedUp: boolean("credentialBackedUp").notNull(),
-    transports: text("transports"),
-  },
-  (authenticator) => ({
-    compositePK: primaryKey({
-      columns: [authenticator.userId, authenticator.credentialID],
+      columns: [verificationToken.email, verificationToken.token],
     }),
   })
 );

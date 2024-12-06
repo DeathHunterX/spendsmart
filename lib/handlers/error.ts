@@ -34,7 +34,7 @@ const formatResponse = (
       });
 
     default:
-      return { status, ...responseContent }; // Default case to handle others
+      return { ...responseContent, status }; // Default case to handle others
   }
 };
 

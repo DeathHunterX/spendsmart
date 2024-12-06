@@ -15,7 +15,8 @@ import { AUTH_ROUTES } from "@/constants/routes";
 import { BadgeCheck, Bell, CreditCard, LogOut } from "lucide-react";
 import { signOut, useSession } from "next-auth/react";
 const UserNav = () => {
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
+
   if (session) {
     return (
       <DropdownMenu>

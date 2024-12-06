@@ -17,3 +17,7 @@ export interface SignUpParams {
   email: string;
   password: string;
 }
+
+export interface SearchParamsProps {
+  searchParams: { [key: string]: string | undefined };
+}

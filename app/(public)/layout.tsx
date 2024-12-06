@@ -1,7 +1,7 @@
 import Navbar from "@/components/shared/navbar";
 import React from "react";
 
-const RootLayout = ({ children }: { children: React.ReactNode }) => {
+const PublicLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <div className="relative">
       <Navbar />
@@ -10,4 +10,4 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
   );
 };
 
-export default RootLayout;
+export default PublicLayout;

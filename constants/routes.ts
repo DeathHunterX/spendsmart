@@ -11,6 +11,7 @@ export const publicRoutes: Array<string> = [
   "/service",
   "/sign-in",
   "/sign-up",
+  "/new-verification",
 ];
 
 /**

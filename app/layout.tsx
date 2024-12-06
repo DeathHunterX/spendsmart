@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import React from "react";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
-import { SessionProvider } from "next-auth/react";
-import { auth } from "@/auth";
+
 import { QueryProviders } from "@/providers/query-provider";
+import AuthProvider from "@/providers/AuthProvider";
 
 export const metadata: Metadata = {
   title: "SpendSmart",
@@ -14,22 +14,21 @@ export const metadata: Metadata = {
   },
 };
 
-const MainLayout = async ({
+const RootLayout = ({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) => {
-  const session = await auth();
   return (
     <html lang="en" suppressHydrationWarning={true}>
-      <SessionProvider session={session}>
-        <body className="antialiased">
+      <body className="antialiased">
+        <AuthProvider>
           <QueryProviders>{children}</QueryProviders>
           <Toaster />
-        </body>
-      </SessionProvider>
+        </AuthProvider>
+      </body>
     </html>
   );
 };
 
-export default MainLayout;
+export default RootLayout;

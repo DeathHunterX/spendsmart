@@ -1,8 +1,42 @@
 import GitHub from "next-auth/providers/github";
 import Google from "next-auth/providers/google";
+import Credentials from "next-auth/providers/credentials";
 
 import type { NextAuthConfig } from "next-auth";
+import { SignInSchema } from "./lib/validation";
+
+import { UserParams } from "./types";
+
+import { verifyUserCredentials } from "./lib/actions/auth/signUp.action";
 
 export default {
-  providers: [GitHub, Google],
+  providers: [
+    Credentials({
+      name: "credentials",
+      credentials: {
+        email: {},
+        password: {},
+      },
+      async authorize(credentials) {
+        const validatedFields = SignInSchema.safeParse(credentials);
+
+        if (validatedFields.success) {
+          const { email, password } = validatedFields.data;
+          const isUserCredentials = await verifyUserCredentials({
+            email,
+            password,
+          });
+
+          if (!isUserCredentials.success) {
+            return null;
+          }
+
+          return isUserCredentials.user as unknown as UserParams;
+        }
+        return null;
+      },
+    }),
+    GitHub,
+    Google,
+  ],
 } satisfies NextAuthConfig;

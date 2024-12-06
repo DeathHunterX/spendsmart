@@ -24,14 +24,14 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
 import { toast } from "@/hooks/use-toast";
-import { cn } from "@/lib/utils";
-import { login, register } from "@/actions/user.action";
-import { AUTH_ROUTES } from "@/constants/routes";
+import { AUTH_ROUTES, DEFAULT_LOGIN_REDIRECT } from "@/constants/routes";
+import { ActionResponse } from "@/types/global";
+import { useRouter } from "next/navigation";
 
 interface AuthFormProps<T extends FieldValues> {
   schema: ZodType<T>;
   defaultValues: T;
-  onSubmit: (data: T) => Promise<{ success: boolean }>;
+  onSubmit: (data: T) => Promise<ActionResponse>;
   formType: "SIGN_IN" | "SIGN_UP";
 }
 
@@ -41,38 +41,36 @@ const AuthForm = <T extends FieldValues>({
   formType,
   onSubmit,
 }: AuthFormProps<T>) => {
+  const router = useRouter();
   const form = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
     defaultValues: defaultValues as DefaultValues<T>,
   });
 
-  const handleSubmit: SubmitHandler<T> = async (values: any) => {
-    // TODO: Authenticate User
-    if (formType === "SIGN_IN") {
-      const res = await login(values);
-      console.log(res);
-      // if (res.success || res.status === 201) {
-      //   toast({
-      //     className: cn(
-      //       "top-0 right-0 flex fixed md:max-w-[420px] md:top-4 md:right-4"
-      //     ),
-      //     variant: "default",
-      //     title: "Sign in",
-      //     description: res.message,
-      //   });
-      // }
-    } else if (formType === "SIGN_UP") {
-      const res = await register(values);
-      if (res.success || res.status === 201) {
-        toast({
-          className: cn(
-            "top-0 right-0 flex fixed md:max-w-[420px] md:top-4 md:right-4"
-          ),
-          variant: "default",
-          title: "Sign up",
-          description: res.message,
-        });
+  const handleSubmit: SubmitHandler<T> = async (data: T) => {
+    const result = (await onSubmit(data)) as ActionResponse;
+
+    if (result?.success) {
+      toast({
+        title: "Success",
+        description:
+          formType === "SIGN_IN"
+            ? "Signed in successfully"
+            : "Signed up successfully. Check your mail for email verification",
+      });
+      router.push(
+        formType === "SIGN_IN" ? DEFAULT_LOGIN_REDIRECT : AUTH_ROUTES.SIGN_IN
+      );
+
+      if (formType === "SIGN_IN") {
+        window.location.reload();
       }
+    } else {
+      toast({
+        title: `Error ${result?.status}`,
+        description: result?.error?.message,
+        variant: "destructive",
+      });
     }
   };
 

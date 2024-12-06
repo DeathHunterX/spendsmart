@@ -1,5 +1,4 @@
-import NextAuth from "next-auth";
-import authConfig from "@/auth.config";
+import { auth } from "@/auth";
 
 import {
   AUTH_ROUTES,
@@ -10,10 +9,7 @@ import {
 } from "@/constants/routes";
 import { NextResponse } from "next/server";
 
-const { auth } = NextAuth(authConfig);
-export default auth(async function middleware(
-  req: any
-): Promise<Response | void> {
+export default auth((req: any) => {
   const { nextUrl } = req;
   const isLoggedIn = !!req.auth;
 
@@ -30,30 +26,51 @@ export default auth(async function middleware(
   //   console.log("isSignInPage: ", isSignInPage);
   //   console.log("isDefaultRedirect: ", isDefaultRedirect);
 
+  /**
+   * Case:
+   *    - Allow API auth routes to proceed without any redirection.
+   */
   if (isApiAuthRoute) {
-    // Allow API auth routes to proceed
-    return;
+    return NextResponse.next();
   }
 
   /**
    * Case:
-   *    -
+   *    - User is logged in.
+   *    - User is trying to access an auth route (like login or register).
+   *    - User is NOT already on the dashboard or sign-in page.
+   *    - Redirect the user to the dashboard.
    */
-
-  if (isAuthRoute && isLoggedIn && !isDefaultRedirect) {
-    // Redirect authenticated users away from auth routes (e.g., login page)
+  if (isAuthRoute && isLoggedIn && !isDefaultRedirect && !isOnSignInPage) {
     return NextResponse.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl));
   }
 
+  /**
+   * Case:
+   *    - User is logged in.
+   *    - User is trying to access the sign-in page.
+   *    - Redirect the user to the dashboard since they are already logged in.
+   */
+  if (isLoggedIn && isOnSignInPage) {
+    return NextResponse.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl));
+  }
+
+  /**
+   * Case:
+   *    - User is not logged in.
+   *    - User is trying to access a non-public route.
+   *    - Redirect the user to the sign-in page.
+   */
   if (!isLoggedIn && !isPublicRoute && !isOnSignInPage) {
-    // Redirect unauthenticated users to the sign-in page if they try to access non-public routes
     return NextResponse.redirect(new URL("/sign-in", nextUrl));
   }
 
-  if (isLoggedIn && isOnSignInPage) {
-    // If the user is logged in and they try to access the sign-in page, redirect them to the dashboard
-    return NextResponse.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl));
-  }
+  /**
+   * Case:
+   *    - Allow the request to proceed as no redirect conditions were met.
+   */
+  // eslint-disable-next-line no-useless-return
+  return NextResponse.next();
 });
 
 export const config = {
