@@ -62,7 +62,40 @@ Follow these steps to set up the project locally:
   bun install
 ```
 
-3. **Run the App:**
+3. **Set up .env.local file**
+
+```
+  AUTH_SECRET=
+  AUTH_GITHUB_ID=
+  AUTH_GITHUB_SECRET=
+
+  AUTH_GOOGLE_ID=
+  AUTH_GOOGLE_SECRET=
+
+  DATABASE_URL=
+
+  NEXT_PUBLIC_APP_URL=
+
+  RESEND_API_KEY=
+```
+
+4. **Set up Drizzle**
+
+- For npm
+
+```
+
+```
+
+- For bun
+
+```
+  bun run db:generate
+  bun run db:migrate
+  bun run db:studio     # Optional: If you want to check data
+```
+
+5. **Run the App:**
    <br />Start the development server
 
 ```bash

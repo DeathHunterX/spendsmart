@@ -122,3 +122,31 @@ export const navMain = [
     ],
   },
 ];
+
+export const settingsDropdown = [
+  {
+    title: "Account",
+    url: "/settings/account",
+    icon: "user",
+  },
+  {
+    title: "Preferences",
+    url: "/settings/preferences",
+    icon: "preferences",
+  },
+  {
+    title: "Notifications",
+    url: "/settings/notifications",
+    icon: "bell",
+  },
+  {
+    title: "Privacy & Security",
+    url: "/settings/privacy-security",
+    icon: "shield",
+  },
+  {
+    title: "Localization",
+    url: "/settings/localization",
+    icon: "localization",
+  },
+];

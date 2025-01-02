@@ -22,12 +22,16 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import ROUTES from "@/constants/routes";
+
+import { toast } from "@/hooks/use-toast";
+import { AUTH_ROUTES, DEFAULT_LOGIN_REDIRECT } from "@/constants/routes";
+import { ActionResponse } from "@/types/global";
+import { useRouter } from "next/navigation";
 
 interface AuthFormProps<T extends FieldValues> {
   schema: ZodType<T>;
   defaultValues: T;
-  onSubmit: (data: T) => Promise<{ success: boolean }>;
+  onSubmit: (data: T) => Promise<ActionResponse>;
   formType: "SIGN_IN" | "SIGN_UP";
 }
 
@@ -37,13 +41,37 @@ const AuthForm = <T extends FieldValues>({
   formType,
   onSubmit,
 }: AuthFormProps<T>) => {
+  const router = useRouter();
   const form = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
     defaultValues: defaultValues as DefaultValues<T>,
   });
 
-  const handleSubmit: SubmitHandler<T> = async () => {
-    // TODO: Authenticate User
+  const handleSubmit: SubmitHandler<T> = async (data: T) => {
+    const result = (await onSubmit(data)) as ActionResponse;
+
+    if (result?.success) {
+      toast({
+        title: "Success",
+        description:
+          formType === "SIGN_IN"
+            ? "Signed in successfully"
+            : "Signed up successfully. Check your mail for email verification",
+      });
+      router.push(
+        formType === "SIGN_IN" ? DEFAULT_LOGIN_REDIRECT : AUTH_ROUTES.SIGN_IN
+      );
+
+      if (formType === "SIGN_IN") {
+        window.location.reload();
+      }
+    } else {
+      toast({
+        title: `Error ${result?.status}`,
+        description: result?.error?.message,
+        variant: "destructive",
+      });
+    }
   };
 
   const buttonText = formType === "SIGN_IN" ? "Sign In" : "Sign Up";
@@ -95,14 +123,14 @@ const AuthForm = <T extends FieldValues>({
         {formType === "SIGN_IN" ? (
           <p className="text-sm leading-relaxed">
             Not registered yet?{" "}
-            <Link href={ROUTES.SIGN_UP} className="paragraph-semibold">
+            <Link href={AUTH_ROUTES.SIGN_UP} className="paragraph-semibold">
               Create an Account
             </Link>
           </p>
         ) : (
           <p className="text-sm leading-relaxed">
             Already have an account?{" "}
-            <Link href={ROUTES.SIGN_IN} className="paragraph-semibold">
+            <Link href={AUTH_ROUTES.SIGN_IN} className="paragraph-semibold">
               Sign in
             </Link>
           </p>

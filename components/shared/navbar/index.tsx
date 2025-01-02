@@ -3,7 +3,7 @@ import NavbarLogo from "./Logo";
 import MobileNavigation from "./MobileNav";
 import NavLinks from "./NavLinks";
 import Link from "next/link";
-import ROUTES from "@/constants/routes";
+import { AUTH_ROUTES } from "@/constants/routes";
 import { Button } from "@/components/ui/button";
 
 const Navbar = () => {
@@ -18,13 +18,13 @@ const Navbar = () => {
       <div className="flex flex-row gap-5 ">
         <MobileNavigation />
         <div className="hidden md:flex">
-          <Link href={ROUTES.SIGN_IN}>
+          <Link href={AUTH_ROUTES.SIGN_IN}>
             <Button className="bg-transparent hover:bg-transparent">
               Sign In
             </Button>
           </Link>
 
-          <Link href={ROUTES.SIGN_UP}>
+          <Link href={AUTH_ROUTES.SIGN_UP}>
             <Button className=" min-h-[41px] w-full rounded-full border border-white-100 bg-white-100  px-4 py-3 text-blue-600 hover:border-blue-400 hover:bg-blue-400 hover:text-white">
               Get Started
             </Button>
