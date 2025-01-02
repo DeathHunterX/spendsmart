@@ -1,3 +1,5 @@
+import React from "react";
+
 export interface UserParams {
   id?: string;
   name?: string;
@@ -20,4 +22,38 @@ export interface SignUpParams {
 
 export interface SearchParamsProps {
   searchParams: { [key: string]: string | undefined };
+}
+
+export interface AccountImgProps {
+  image: string;
+  name: string;
+}
+
+export interface SettingsCardProps {
+  type:
+    | "id"
+    | "photo"
+    | "text"
+    | "switch"
+    | "checkbox"
+    | "button"
+    | "input-hidden"
+    | "status"
+    | "table"
+    | "select"
+    | "custom";
+  name: string;
+  description?: string;
+  data?: string | Object<AccountImgProps> | Object<any> | null;
+  children?: React.ReactNode;
+  isLast?: boolean;
+  btnName?: string;
+  variant?:
+    | "link"
+    | "default"
+    | "destructive"
+    | "outline"
+    | "secondary"
+    | "ghost";
+  customStyling?: string;
 }

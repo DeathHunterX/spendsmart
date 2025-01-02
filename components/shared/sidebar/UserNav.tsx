@@ -11,11 +11,14 @@ import {
   // DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { settingsDropdown } from "@/constants";
 import { AUTH_ROUTES } from "@/constants/routes";
-import { BadgeCheck, Bell, CreditCard, LogOut } from "lucide-react";
+import { LogOut } from "lucide-react";
 import { signOut, useSession } from "next-auth/react";
+import Link from "next/link";
+import { Icons } from "../icons";
 const UserNav = () => {
-  const { data: session, status } = useSession();
+  const { data: session } = useSession();
 
   if (session) {
     return (
@@ -62,18 +65,18 @@ const UserNav = () => {
           <DropdownMenuSeparator />
 
           <DropdownMenuGroup>
-            <DropdownMenuItem>
-              <BadgeCheck />
-              Account
-            </DropdownMenuItem>
-            <DropdownMenuItem>
-              <CreditCard />
-              Billing
-            </DropdownMenuItem>
-            <DropdownMenuItem>
-              <Bell />
-              Notifications
-            </DropdownMenuItem>
+            {settingsDropdown.map((item) => {
+              const Icon = item.icon
+                ? Icons[item.icon as keyof typeof Icons]
+                : Icons.logo;
+              return (
+                <Link href={item.url} key={item.title}>
+                  <DropdownMenuItem>
+                    <Icon /> {item.title}
+                  </DropdownMenuItem>
+                </Link>
+              );
+            })}
           </DropdownMenuGroup>
           <DropdownMenuSeparator />
           <DropdownMenuItem

@@ -42,11 +42,21 @@ import {
   Target,
   Gift,
   FileTextIcon,
+  Bell,
+  Shield,
+  Navigation,
+  Settings2,
+  Copy,
+  Share2,
 } from "lucide-react";
 
 export type Icon = LucideIcon;
 
 export const Icons = {
+  bell: Bell,
+  shield: Shield,
+  localization: Navigation,
+  preferences: Settings2,
   dashboard: LayoutDashboardIcon,
   logo: Command,
   login: LogIn,
@@ -105,4 +115,6 @@ export const Icons = {
   target: Target,
   gift: Gift,
   fileText: FileTextIcon,
+  copy: Copy,
+  share: Share2,
 };

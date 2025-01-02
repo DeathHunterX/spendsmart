@@ -42,3 +42,17 @@ export const AUTH_ROUTES = {
   SIGN_IN: "/sign-in",
   SIGN_UP: "/sign-up",
 };
+
+export const PRIVATE_ROUTES = {
+  // Dashboard
+  DASHBOARD: "/dashboard",
+  // Net worth
+  NET_WORTH: "/net-worth",
+
+  // Settings
+  ACCOUNT: "/settings/account",
+  PREFERENCES: "/settings/preferences",
+  PRIVACY_SECURITY: "/settings/privacy-security",
+  LOCALIZATION: "/settings/localization",
+  NOTIFICATION: "/settings/notification",
+};

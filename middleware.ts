@@ -70,6 +70,8 @@ export default auth((req: any) => {
    *    - Allow the request to proceed as no redirect conditions were met.
    */
   // eslint-disable-next-line no-useless-return
+
+  // TODO: Add the i18n middleware
   return NextResponse.next();
 });
 
