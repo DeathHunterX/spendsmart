@@ -35,13 +35,17 @@ const SettingsCard = ({
   variant,
   customStyling,
   isLast = false,
+  onAction,
+  value,
 }: SettingsCardProps) => {
   return (
     <div className="relative flex border-b-2 border-gray-200 py-6">
       <div className="flex w-full flex-row">
         <div className="w-1/4 items-center">
           <h4 className="font-semibold">{name}</h4>
-          <small className="leading-3 text-[#676769]">{description}</small>
+          <small className="leading-3 text-[#676769] dark:text-light-400">
+            {description}
+          </small>
         </div>
 
         <div className="ms-10 w-3/4">
@@ -96,7 +100,7 @@ const SettingsCard = ({
 
           {/* ============== Select ==================== */}
           {type === "select" && (
-            <Select>
+            <Select onValueChange={onAction} defaultValue={value}>
               <SelectTrigger className="w-[180px]">
                 <SelectValue placeholder="Theme" />
               </SelectTrigger>
@@ -131,7 +135,7 @@ const SettingsCard = ({
                 variant
                   ? ""
                   : customStyling ||
-                    "h-10 border border-gray-400 bg-white px-3 py-2 text-black hover:bg-gray-300"
+                    "h-10 border border-gray-200 bg-light-900 px-3 py-2 text-xs text-black hover:bg-light-700"
               }
             >
               {btnName}

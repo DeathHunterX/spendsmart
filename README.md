@@ -17,20 +17,15 @@
 
 ## Technology Stack
 
-- Front-end
-  - Next.js 15
-  - React 19
-  - Tailwind CSS
-  - NextAuth
-  - Shadcn/ui
-  - lucide-react
-  - Logoipsum
-- Back-end
-  - Hono
-  - Node.js
-  - Drizzle
-- Database
-  - Neon
+- Next.js 15
+- React 19
+- Tailwind CSS
+- NextAuth
+- Shadcn/ui
+- lucide-react
+- Logoipsum
+- Drizzle
+- NeonDB
 
 ## Project Structure
 

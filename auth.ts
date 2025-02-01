@@ -3,7 +3,7 @@ import authConfig from "./auth.config";
 
 import { DrizzleAdapter } from "@auth/drizzle-adapter";
 import { db } from "./db/drizzle";
-import { getUserById } from "./lib/actions/auth/signUp.action";
+import { getUserById } from "./lib/actions/queries.action";
 import { users } from "./db/schemas";
 import { eq } from "drizzle-orm";
 
@@ -21,7 +21,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   },
   callbacks: {
     async signIn({ user, account }) {
-      console.log({ user, account });
       if (account?.provider !== "credentials") return true;
       if (!account || !user) return false;
 
@@ -29,7 +28,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       if (!existingUser || !existingUser.emailVerified) {
         return false;
       }
-      console.log(existingUser);
 
       return true;
     },

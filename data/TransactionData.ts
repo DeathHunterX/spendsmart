@@ -1,0 +1,60 @@
+import { Payment } from "@/components/shared/tables/Transactions/columns";
+
+export const data: Payment[] = [
+  {
+    id: "1",
+    date: "2025-01-01",
+    amount: 120.5,
+    payee: "Amazon",
+    method: "Credit Card",
+    category: "Shopping",
+  },
+  {
+    id: "2",
+    date: "2025-01-02",
+    amount: 65.75,
+    payee: "Starbucks",
+    method: "Debit Card",
+    category: "Food & Drink",
+  },
+  {
+    id: "3",
+    date: "2025-01-03",
+    amount: 500.0,
+    payee: "Rent Payment",
+    method: "Bank Transfer",
+    category: "Housing",
+  },
+  {
+    id: "4",
+    date: "2025-01-03",
+    amount: 35.0,
+    payee: "Uber",
+    method: "PayPal",
+    category: "Transportation",
+  },
+  {
+    id: "5",
+    date: "2025-01-04",
+    amount: 150.0,
+    payee: "Spotify",
+    method: "Credit Card",
+    category: "Entertainment",
+  },
+  {
+    id: "6",
+    date: "2025-01-04",
+    amount: 250.0,
+    payee: "Grocery Store",
+    method: "Cash",
+    category: "Groceries",
+  },
+  {
+    id: "7",
+    date: "2025-01-05",
+    amount: 75.99,
+    payee: "Netflix",
+    method: "Credit Card",
+    category: "Entertainment",
+  },
+];

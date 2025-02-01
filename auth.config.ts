@@ -5,7 +5,7 @@ import Credentials from "next-auth/providers/credentials";
 import type { NextAuthConfig } from "next-auth";
 import { SignInSchema } from "./lib/validation";
 
-import { UserParams } from "./types";
+import { User } from "@/types/global";
 
 import { verifyUserCredentials } from "./lib/actions/auth/signUp.action";
 
@@ -31,12 +31,20 @@ export default {
             return null;
           }
 
-          return isUserCredentials.user as unknown as UserParams;
+          return isUserCredentials.user as unknown as User;
         }
         return null;
       },
     }),
-    GitHub,
-    Google,
+    GitHub({
+      clientId: process.env.AUTH_GITHUB_ID,
+      clientSecret: process.env.AUTH_GITHUB_SECRET,
+      allowDangerousEmailAccountLinking: true,
+    }),
+    Google({
+      clientId: process.env.AUTH_GOOGLE_ID,
+      clientSecret: process.env.AUTH_GOOGLE_SECRET,
+      allowDangerousEmailAccountLinking: true,
+    }),
   ],
 } satisfies NextAuthConfig;
