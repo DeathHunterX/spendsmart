@@ -121,6 +121,25 @@ export const navMain = [
       },
     ],
   },
+
+  {
+    title: "Settings",
+    isActive: true,
+    items: [
+      {
+        title: "Wallet",
+        url: "/wallets",
+        icon: "wallet",
+        isActive: true,
+      },
+      {
+        title: "Categories",
+        url: "/categories",
+        icon: "target",
+        isActive: true,
+      },
+    ],
+  },
 ];
 
 export const settingsDropdown = [

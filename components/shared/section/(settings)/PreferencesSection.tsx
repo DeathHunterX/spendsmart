@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/select";
 
 import "../../../../node_modules/flag-icons/css/flag-icons.min.css";
+import { useTheme } from "next-themes";
 
 interface Country {
   code: string;
@@ -20,6 +21,8 @@ interface Country {
 
 const PreferencesSection = () => {
   const [countryData, setCountryData] = useState<Array<Country>>([]);
+  const { setTheme, theme } = useTheme();
+
   useEffect(() => {
     async function fetchData() {
       const response = await fetch(
@@ -62,6 +65,8 @@ const PreferencesSection = () => {
         name="Theme"
         description="Set unique code that appears on SpendSmart communications from us to you"
         data={countryData}
+        onAction={(data) => setTheme(data)}
+        value={theme}
       />
       <SettingsCard
         type="button"

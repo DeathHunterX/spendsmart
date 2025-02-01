@@ -1,35 +1,26 @@
 import React from "react";
 
-export interface UserParams {
-  id?: string;
-  name?: string;
-  email?: string;
-  emailVerified?: string | null;
-  password?: string;
-  image?: string | null;
-}
-
-export interface SignInParams {
+interface SignInParams {
   email: string;
   password: string;
 }
 
-export interface SignUpParams {
+interface SignUpParams {
   name: string;
   email: string;
   password: string;
 }
 
-export interface SearchParamsProps {
+interface SearchParamsProps {
   searchParams: { [key: string]: string | undefined };
 }
 
-export interface AccountImgProps {
+interface AccountImgProps {
   image: string;
   name: string;
 }
 
-export interface SettingsCardProps {
+interface SettingsCardProps {
   type:
     | "id"
     | "photo"
@@ -56,4 +47,10 @@ export interface SettingsCardProps {
     | "secondary"
     | "ghost";
   customStyling?: string;
+  onAction?: (data: any) => void | Promise<any>;
+  value?: any;
+}
+
+interface TransactionProps {
+  id: string;
 }

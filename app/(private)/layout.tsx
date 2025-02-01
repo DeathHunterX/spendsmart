@@ -11,18 +11,17 @@ import { Separator } from "@/components/ui/separator";
 import Breadcrumbs from "@/components/shared/breadcrumbs";
 import SearchInput from "@/components/shared/search/GlobalSearchInput";
 import UserNav from "@/components/shared/sidebar/UserNav";
+import SheetProvider from "@/providers/SheetProvider";
 
 const PrivateLayout = ({ children }: { children: React.ReactNode }) => {
-  const [mounted, setMounted] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
 
   // Only render after first client-side mount
   useEffect(() => {
-    setMounted(true);
+    setIsMounted(true);
   }, []);
 
-  if (!mounted) {
-    return null; // or a loading skeleton
-  }
+  if (!isMounted) return null; // or a loading skeleton
 
   return (
     <div className="relative">
@@ -47,6 +46,7 @@ const PrivateLayout = ({ children }: { children: React.ReactNode }) => {
           <section className="pl-8 pr-4">{children}</section>
         </SidebarInset>
       </SidebarProvider>
+      <SheetProvider />
     </div>
   );
 };

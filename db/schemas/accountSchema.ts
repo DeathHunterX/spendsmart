@@ -1,14 +1,16 @@
 import {
   pgTable,
   text,
-  integer,
   primaryKey,
   timestamp,
+  integer,
 } from "drizzle-orm/pg-core";
 import type { AdapterAccountType } from "next-auth/adapters";
 import { v7 as uuidv7 } from "uuid";
 
 import { users } from "./userSchema";
+import { createSelectSchema } from "drizzle-zod";
+import { InferSelectModel } from "drizzle-orm";
 
 export const accounts = pgTable(
   "account",
@@ -19,6 +21,7 @@ export const accounts = pgTable(
     type: text("type").$type<AdapterAccountType>().notNull(),
     provider: text("provider").notNull(),
     providerAccountId: text("providerAccountId").notNull(),
+    password: text("password"),
     refresh_token: text("refresh_token"),
     access_token: text("access_token"),
     expires_at: integer("expires_at"),
@@ -48,3 +51,9 @@ export const verificationTokens = pgTable(
     }),
   })
 );
+
+// Zod schema
+export const getAccountSchema = createSelectSchema(accounts);
+
+//
+export type Account = InferSelectModel<typeof accounts>;

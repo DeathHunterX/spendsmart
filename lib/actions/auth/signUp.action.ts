@@ -1,11 +1,12 @@
 "use server";
-
 // Database
 import { db } from "@/db/drizzle";
 import { sql } from "drizzle-orm";
+
 // Schema
 import { accounts, users } from "@/db/schemas";
 import { SignUpSchema } from "@/lib/validation";
+
 // Error handling
 import {
   ConflictError,
@@ -13,42 +14,14 @@ import {
   ValidationError,
 } from "@/lib/http-error";
 import handleError from "@/lib/handlers/error";
+import { ActionResponse, ErrorResponse } from "@/types/global";
 
-// Types
-// import { Account } from "@/types";
 import bcryptjs from "bcryptjs";
-
-// import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
-import { ActionResponse, ErrorResponse } from "@/types/global";
-import { UserParams } from "@/types";
 import { generateVerificationToken } from "./verificationToken.action";
 import { sendVerificationEmail } from "./sendMail.action";
-
-export const getUserByEmail = async (email: string) => {
-  try {
-    const user = await db.execute(
-      sql`SELECT DISTINCT * FROM ${users} WHERE ${users.email} = ${email}`
-    );
-
-    return user.rows[0];
-  } catch (error) {
-    return null;
-  }
-};
-
-export const getUserById = async (id: string) => {
-  try {
-    const user = await db.execute(
-      sql`SELECT DISTINCT * FROM ${users} WHERE ${users.id} = ${id}`
-    );
-
-    return user.rows[0];
-  } catch {
-    return null;
-  }
-};
+import { getAccountById, getUserByEmail } from "../queries.action";
 
 export async function signUpWithCredentials(
   params: z.infer<typeof SignUpSchema>
@@ -76,7 +49,7 @@ export async function signUpWithCredentials(
 
     const [newUser] = await db
       .insert(users)
-      .values({ name, email, password: hashedPassword })
+      .values({ name, email })
       .returning();
 
     await db.insert(accounts).values({
@@ -84,6 +57,7 @@ export async function signUpWithCredentials(
       type: "email",
       provider: "credentials",
       providerAccountId: email,
+      password: hashedPassword,
     });
 
     // TODO: Send email verification token
@@ -112,11 +86,14 @@ export async function verifyUserCredentials(params: any) {
         error: "You need to fill all the required!",
       };
     }
-    const existedUser: UserParams | null = await getUserByEmail(email);
-    if (!existedUser) {
-      throw new NotFoundError("User");
-    }
-    if (!existedUser.password) {
+    const existingUser = await getUserByEmail(email);
+    if (!existingUser) throw new NotFoundError("User");
+
+    const existingAccount = await getAccountById(existingUser.id!);
+
+    if (!existingAccount) throw new NotFoundError("Account");
+
+    if (!existingAccount?.password) {
       return {
         success: false,
         user: null,
@@ -125,7 +102,7 @@ export async function verifyUserCredentials(params: any) {
     }
     const isPasswordMatches = await bcryptjs.compare(
       password,
-      existedUser.password
+      existingAccount.password
     );
 
     if (!isPasswordMatches) {
@@ -139,7 +116,7 @@ export async function verifyUserCredentials(params: any) {
     // Return the user data as a successful response
     return {
       success: true,
-      user: existedUser,
+      user: existingUser,
       status: 200,
     };
   } catch (error) {

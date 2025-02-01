@@ -4,7 +4,7 @@ import { ZodError } from "zod";
 import { RequestError, ValidationError } from "../http-error";
 import logger from "../logger";
 
-export type ResponseType = "api" | "server" | "hono";
+export type ResponseType = "api" | "server";
 
 const formatResponse = (
   responseType: ResponseType,
@@ -24,14 +24,6 @@ const formatResponse = (
   switch (responseType) {
     case "api": // Next.js API route
       return NextResponse.json(responseContent, { status });
-
-    case "hono": // Hono.js route, use Hono Response.json()
-      return new Response(JSON.stringify(responseContent), {
-        status,
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
 
     default:
       return { ...responseContent, status }; // Default case to handle others

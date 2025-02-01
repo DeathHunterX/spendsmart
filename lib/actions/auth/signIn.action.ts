@@ -13,7 +13,7 @@ import {
 } from "@/lib/http-error";
 import handleError from "@/lib/handlers/error";
 import { ActionResponse, ErrorResponse } from "@/types/global";
-import { getUserByEmail } from "./signUp.action";
+import { getUserByEmail } from "../queries.action";
 
 export const signInWithCredentials = async (
   params: z.infer<typeof SignInSchema>

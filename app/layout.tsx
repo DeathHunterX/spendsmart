@@ -3,8 +3,8 @@ import React from "react";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 
-import { QueryProviders } from "@/providers/query-provider";
 import AuthProvider from "@/providers/AuthProvider";
+import { ThemeProvider } from "@/context/Theme";
 
 export const metadata: Metadata = {
   title: "SpendSmart",
@@ -23,7 +23,14 @@ const RootLayout = ({
     <html lang="en" suppressHydrationWarning={true}>
       <body className="antialiased">
         <AuthProvider>
-          <QueryProviders>{children}</QueryProviders>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            {children}
+          </ThemeProvider>
           <Toaster />
         </AuthProvider>
       </body>

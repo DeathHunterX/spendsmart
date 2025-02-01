@@ -6,7 +6,7 @@ import { sql } from "drizzle-orm";
 import { users, verificationTokens } from "@/db/schemas";
 // UUID
 import { v7 as uuidv7 } from "uuid";
-import { getUserByEmail } from "./signUp.action";
+import { getUserByEmail } from "../queries.action";
 
 import handleError from "@/lib/handlers/error";
 

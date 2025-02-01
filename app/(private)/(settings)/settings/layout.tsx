@@ -24,7 +24,7 @@ const SettingsLayout = ({
               <Link href={item.url}>
                 {item.title}
                 {pathname === item.url && (
-                  <span className="absolute bottom-[-2px] left-0 h-[2px] w-full bg-black "></span>
+                  <span className="absolute bottom-[-2px] left-0 h-[3px] w-full bg-black dark:bg-[#A0A0A0]"></span>
                 )}
               </Link>
             </li>

@@ -1,4 +1,5 @@
 import { pgTable, text, timestamp, numeric } from "drizzle-orm/pg-core";
+import { createUpdateSchema } from "drizzle-zod";
 
 import { v7 as uuidv7 } from "uuid";
 
@@ -8,7 +9,6 @@ export const users = pgTable("user", {
     .$defaultFn(() => uuidv7()),
   name: text("name"),
   email: text("email").unique(),
-  password: text("password"),
   emailVerified: timestamp("emailVerified", { mode: "date" }),
   image: text("image"),
   phoneNumber: numeric("phoneNumber"),
@@ -16,3 +16,5 @@ export const users = pgTable("user", {
   address: text("address"),
   joinedAt: timestamp().notNull().defaultNow(),
 });
+
+export const updateUserSchema = createUpdateSchema(users);
