@@ -2,8 +2,8 @@
 import { SignUpSchema } from "@/lib/validation";
 import { signUpWithCredentials } from "@/lib/actions/auth/signUp.action";
 
-import AuthForm from "@/components/shared/forms/AuthForm";
-import SocialAuthForm from "@/components/shared/forms/SocialAuthForm";
+import AuthForm from "@/components/shared/forms/auth/AuthForm";
+import SocialAuthForm from "@/components/shared/forms/auth/SocialAuthForm";
 import AuthPageWrapper from "@/components/shared/wrapper/AuthPageWrapper";
 
 const SignUpPage = () => {

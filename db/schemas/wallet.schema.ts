@@ -1,8 +1,12 @@
 import { pgTable, text, decimal } from "drizzle-orm/pg-core";
+import { createInsertSchema, createSelectSchema } from "drizzle-zod";
+import { relations } from "drizzle-orm";
 
 import { v7 as uuidv7 } from "uuid";
-import { users } from "./userSchema";
-import { createInsertSchema, createSelectSchema } from "drizzle-zod";
+
+// Other Schemas
+import { users } from "./user.schema";
+import { transactions } from "./transaction.schema";
 
 export const wallets = pgTable("wallet", {
   id: text("id")
@@ -18,3 +22,7 @@ export const wallets = pgTable("wallet", {
 
 export const insertWalletSchema = createInsertSchema(wallets);
 export const selectWalletSchema = createSelectSchema(wallets);
+
+export const walletsRelation = relations(wallets, ({ many }) => ({
+  transactions: many(transactions),
+}));

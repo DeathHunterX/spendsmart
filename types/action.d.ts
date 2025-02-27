@@ -4,11 +4,11 @@ interface AuthCredentials {
   password: string;
 }
 
-/**
- * ===============================================================================
- * Wallet Params
- * ===============================================================================
- */
+// *
+// * ===============================================================================
+// * Wallet Params
+// * ===============================================================================
+// *
 
 interface CreateWalletParams {
   name: string;
@@ -36,11 +36,11 @@ interface DeleteWalletByIdParams {
   walletId: string;
 }
 
-/**
- * ===============================================================================
- * Category Params
- * ===============================================================================
- */
+// *
+// * ===============================================================================
+// * Category Params
+// * ===============================================================================
+// *
 
 interface CreateCategoryParams {
   name: string;
@@ -65,4 +65,41 @@ interface DeleteCategoryBulkParams {
 
 interface DeleteCategoryByIdParams {
   categoryId: string;
+}
+
+// *
+// * ===============================================================================
+// * Transaction Params
+// * ===============================================================================
+// *
+
+interface GetTransactionDataParams {
+  fromDate?: string;
+  toDate?: string;
+  walletId?: string;
+}
+
+interface GetTransactionByIdParams {
+  transactionId: string;
+}
+
+interface CreateTransactionParams {
+  amount: number;
+  payee: string;
+  notes?: string | null;
+  date: Date;
+  walletId: string;
+  categoryId?: string | null;
+}
+
+interface EditTransactionByIdParams extends CreateTransactionParams {
+  transactionId: string;
+}
+
+interface DeleteTransactionBulkParams {
+  transactionIds: string[];
+}
+
+interface DeleteTransactionByIdParams {
+  transactionId: string;
 }

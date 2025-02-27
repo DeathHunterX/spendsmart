@@ -50,7 +50,3 @@ interface SettingsCardProps {
   onAction?: (data: any) => void | Promise<any>;
   value?: any;
 }
-
-interface TransactionProps {
-  id: string;
-}

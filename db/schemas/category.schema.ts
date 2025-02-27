@@ -1,8 +1,11 @@
 import { pgTable, text } from "drizzle-orm/pg-core";
+import { createInsertSchema, createSelectSchema } from "drizzle-zod";
+import { relations } from "drizzle-orm";
 
 import { v7 as uuidv7 } from "uuid";
-import { users } from "./userSchema";
-import { createInsertSchema, createSelectSchema } from "drizzle-zod";
+
+import { users } from "./user.schema";
+import { transactions } from "./transaction.schema";
 
 export const categories = pgTable("category", {
   id: text("id")
@@ -17,3 +20,7 @@ export const categories = pgTable("category", {
 
 export const insertCategorySchema = createInsertSchema(categories);
 export const selectCategorySchema = createSelectSchema(categories);
+
+export const categoriesRelation = relations(categories, ({ many }) => ({
+  transactions: many(transactions),
+}));

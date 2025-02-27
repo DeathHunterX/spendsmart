@@ -8,7 +8,7 @@ import {
 import type { AdapterAccountType } from "next-auth/adapters";
 import { v7 as uuidv7 } from "uuid";
 
-import { users } from "./userSchema";
+import { users } from "./user.schema";
 import { createSelectSchema } from "drizzle-zod";
 import { InferSelectModel } from "drizzle-orm";
 
@@ -55,5 +55,4 @@ export const verificationTokens = pgTable(
 // Zod schema
 export const getAccountSchema = createSelectSchema(accounts);
 
-//
 export type Account = InferSelectModel<typeof accounts>;

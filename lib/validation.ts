@@ -105,3 +105,40 @@ export const PaginatedSearchParamsSchema = z.object({
   filter: z.string().optional(),
   sort: z.string().optional(),
 });
+
+/**
+ * ===============================================================================
+ * Transaction Schema
+ * ===============================================================================
+ */
+
+export const GetTransactionDataSchema = z.object({
+  fromDate: z.string().optional(),
+  toDate: z.string().optional(),
+  walletId: z.string().optional(),
+});
+
+export const GetTransactionByIdSchema = z.object({
+  transactionId: z.string(),
+});
+
+export const CreateTransactionSchema = z.object({
+  amount: z.coerce.number(),
+  payee: z.string().min(1, { message: "Wallet name is required." }),
+  notes: z.string().nullable().optional(),
+  date: z.coerce.date(),
+  walletId: z.string(),
+  categoryId: z.string().nullable().optional(),
+});
+
+export const EditTransactionByIdSchema = CreateTransactionSchema.extend({
+  transactionId: z.string().min(1, "Transaction ID is required"),
+});
+
+export const DeleteTransactionByIdSchema = z.object({
+  transactionId: z.string(),
+});
+
+export const DeleteTransactionBulkSchema = z.object({
+  transactionIds: z.array(z.string()),
+});

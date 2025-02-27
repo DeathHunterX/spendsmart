@@ -5,6 +5,7 @@ import { Toaster } from "@/components/ui/toaster";
 
 import AuthProvider from "@/providers/AuthProvider";
 import { ThemeProvider } from "@/context/Theme";
+import { QueryProvider } from "@/providers/QueryProvider";
 
 export const metadata: Metadata = {
   title: "SpendSmart",
@@ -23,15 +24,17 @@ const RootLayout = ({
     <html lang="en" suppressHydrationWarning={true}>
       <body className="antialiased">
         <AuthProvider>
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-            disableTransitionOnChange
-          >
-            {children}
-          </ThemeProvider>
-          <Toaster />
+          <QueryProvider>
+            <ThemeProvider
+              attribute="class"
+              defaultTheme="system"
+              enableSystem
+              disableTransitionOnChange
+            >
+              {children}
+            </ThemeProvider>
+            <Toaster />
+          </QueryProvider>
         </AuthProvider>
       </body>
     </html>

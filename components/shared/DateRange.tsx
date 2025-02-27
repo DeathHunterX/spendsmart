@@ -41,7 +41,7 @@ export function DatePickerWithRange({
           />
         </PopoverContent>
       </Popover>
-      <div className="mx-3 flex w-[225px] cursor-default items-center rounded-lg border border-gray-300 bg-white p-2">
+      <div className="mx-3 flex justify-center w-[190px] cursor-default items-center rounded-lg border border-gray-300 bg-white p-2">
         <p
           className={`text-xs font-normal ${!date && "text-muted-foreground"}`}
         >

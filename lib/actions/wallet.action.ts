@@ -7,7 +7,7 @@ import {
   insertWalletSchema,
   selectWalletSchema,
   wallets,
-} from "@/db/schemas/walletSchema";
+} from "@/db/schemas/wallet.schema";
 
 import {
   DeleteWalletBulkSchema,
@@ -68,6 +68,8 @@ export const addWallet = async (
     }
 
     revalidatePath("/wallets");
+    // revalidatePath("/transactions");
+
     return {
       success: true,
       data: JSON.parse(JSON.stringify(newWallet)),
@@ -102,39 +104,6 @@ export const getWalletData = async (
 
     if (!wallet) throw new Error("Wallet not found");
 
-    return { success: true, data: JSON.parse(JSON.stringify(wallet)) };
-  } catch (error) {
-    return handleError(error, "api") as ErrorResponse;
-  }
-};
-
-export const deleteWalletBulk = async (
-  params: DeleteWalletBulkParams
-): Promise<ActionResponse<Wallet>> => {
-  const validationResult = await action({
-    params,
-    schema: DeleteWalletBulkSchema,
-    authorize: true,
-  });
-
-  if (validationResult instanceof Error) {
-    return handleError(validationResult) as ErrorResponse;
-  }
-
-  const { ids } = validationResult.params!;
-  const userId = validationResult.session?.user?.id!;
-
-  try {
-    const wallet = await db
-      .delete(wallets)
-      .where(and(eq(wallets.userId, userId), inArray(wallets.id, ids)))
-      .returning({
-        id: wallets.id,
-      });
-
-    if (!wallet) throw new Error("Wallet not found");
-
-    revalidatePath("/wallets");
     return { success: true, data: JSON.parse(JSON.stringify(wallet)) };
   } catch (error) {
     return handleError(error, "api") as ErrorResponse;
@@ -229,6 +198,39 @@ export const deleteWallet = async (
     const wallet = await db
       .delete(wallets)
       .where(and(eq(wallets.userId, userId), eq(wallets.id, walletId)))
+      .returning({
+        id: wallets.id,
+      });
+
+    if (!wallet) throw new Error("Wallet not found");
+
+    revalidatePath("/wallets");
+    return { success: true, data: JSON.parse(JSON.stringify(wallet)) };
+  } catch (error) {
+    return handleError(error, "api") as ErrorResponse;
+  }
+};
+
+export const deleteWalletBulk = async (
+  params: DeleteWalletBulkParams
+): Promise<ActionResponse<Wallet>> => {
+  const validationResult = await action({
+    params,
+    schema: DeleteWalletBulkSchema,
+    authorize: true,
+  });
+
+  if (validationResult instanceof Error) {
+    return handleError(validationResult) as ErrorResponse;
+  }
+
+  const { ids } = validationResult.params!;
+  const userId = validationResult.session?.user?.id!;
+
+  try {
+    const wallet = await db
+      .delete(wallets)
+      .where(and(eq(wallets.userId, userId), inArray(wallets.id, ids)))
       .returning({
         id: wallets.id,
       });

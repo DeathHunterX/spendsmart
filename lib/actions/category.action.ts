@@ -7,7 +7,7 @@ import {
   categories,
   insertCategorySchema,
   selectCategorySchema,
-} from "@/db/schemas/categorySchema";
+} from "@/db/schemas/category.schema";
 
 import {
   DeleteCategoryBulkSchema,
@@ -29,6 +29,7 @@ import {
   Category,
 } from "@/types/global";
 
+// Other
 import { revalidatePath } from "next/cache";
 
 // Add Category action - POST method
@@ -65,7 +66,6 @@ export const addCategory = async (
       throw new Error("Failed to create category");
     }
 
-    revalidatePath("/categories");
     return {
       success: true,
       data: JSON.parse(JSON.stringify(newCategory)),

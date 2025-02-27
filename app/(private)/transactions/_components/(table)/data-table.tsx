@@ -8,6 +8,7 @@ import {
   getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
+  Row,
   SortingState,
   useReactTable,
   VisibilityState,
@@ -26,28 +27,41 @@ import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogHeader,
-  DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
 
-import { DatePickerWithRange } from "../../DateRange";
-import { SlidersHorizontal } from "lucide-react";
+import { DatePickerWithRange } from "../../../../../components/shared/DateRange";
+import { SlidersHorizontal, Trash } from "lucide-react";
+
+import { useConfirm } from "@/hooks/use-confirm";
+import { DialogDescription, DialogTitle } from "@radix-ui/react-dialog";
+import { DataTablePagination } from "@/components/shared/table/TablePagination";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
+  filterKey: string;
+  onDelete: (rows: Row<TData>[]) => void;
+  disabled?: boolean;
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
+  filterKey,
+  onDelete,
+  disabled,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = useState({});
+
+  const [ConfirmationDialog, confirm] = useConfirm(
+    "Are you sure?",
+    "You are about to perform a bulk delete"
+  );
 
   const table = useReactTable({
     data,
@@ -70,68 +84,73 @@ export function DataTable<TData, TValue>({
 
   return (
     <div className="w-full">
+      <ConfirmationDialog />
+
       <div className="flex items-center py-4">
-        <div className="flex">
-          <DatePickerWithRange />
-          <Dialog>
-            <DialogTrigger className="inline-flex size-10 items-center justify-center rounded-full border border-gray-300 bg-white text-black hover:bg-white">
-              <SlidersHorizontal size={16} />
-            </DialogTrigger>
-            <DialogContent>
-              <DialogHeader>
-                <DialogTitle>Are you absolutely sure?</DialogTitle>
-                <DialogDescription>
-                  This action cannot be undone. This will permanently delete
-                  your account and remove your data from our servers.
-                  <Input
-                    placeholder="Search payee..."
-                    value={
-                      (table.getColumn("payee")?.getFilterValue() as string) ??
-                      ""
-                    }
-                    onChange={(event) =>
-                      table
-                        .getColumn("payee")
-                        ?.setFilterValue(event.target.value)
-                    }
-                    className="max-w-sm"
-                  />
-                </DialogDescription>
-              </DialogHeader>
-            </DialogContent>
-          </Dialog>
+        <div className="flex flex-row w-full justify-between">
+          <div className="flex flex-row items-center">
+            <DatePickerWithRange />
+            <Dialog>
+              <DialogTrigger className="inline-flex size-10 items-center justify-center rounded-full border border-gray-300 bg-white text-black hover:bg-white">
+                <SlidersHorizontal size={16} />
+              </DialogTrigger>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>Filter</DialogTitle>
+
+                  <DialogDescription className="hidden"></DialogDescription>
+                </DialogHeader>
+
+                <Input
+                  placeholder="Search payee..."
+                  value={
+                    (table.getColumn("payee")?.getFilterValue() as string) ?? ""
+                  }
+                  onChange={(event) =>
+                    table.getColumn("payee")?.setFilterValue(event.target.value)
+                  }
+                  className="max-w-sm"
+                />
+              </DialogContent>
+            </Dialog>
+          </div>
+
+          <div className="flex items-center py-4">
+            <Input
+              placeholder={`Filter ${filterKey}...`}
+              value={
+                (table.getColumn(filterKey)?.getFilterValue() as string) ?? ""
+              }
+              onChange={(event) =>
+                table.getColumn(filterKey)?.setFilterValue(event.target.value)
+              }
+              className="max-w-sm mr-4"
+            />
+            {table.getFilteredRowModel().rows.length > 0 && (
+              <Button
+                disabled={disabled}
+                size="sm"
+                variant="outline"
+                className="ml-auto font-normal text-xs"
+                onClick={async () => {
+                  const ok = await confirm();
+                  if (ok) {
+                    onDelete(table.getFilteredSelectedRowModel().rows);
+                    table.resetRowSelection();
+                  }
+                }}
+              >
+                <Trash className="size-4" />
+                Delete ({table.getFilteredSelectedRowModel().rows.length})
+              </Button>
+            )}
+          </div>
         </div>
-        {/* <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="outline" className="ml-auto">
-              Columns <ChevronDown />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            {table
-              .getAllColumns()
-              .filter((column) => column.getCanHide())
-              .map((column) => {
-                return (
-                  <DropdownMenuCheckboxItem
-                    key={column.id}
-                    className="capitalize"
-                    checked={column.getIsVisible()}
-                    onCheckedChange={(value) =>
-                      column.toggleVisibility(!!value)
-                    }
-                  >
-                    {column.id}
-                  </DropdownMenuCheckboxItem>
-                );
-              })}
-          </DropdownMenuContent>
-        </DropdownMenu> */}
       </div>
 
       <div className="rounded-md border">
-        <Table>
-          <TableHeader>
+        <Table className="overflow-x-auto">
+          <TableHeader className="w-1/12">
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
@@ -179,30 +198,8 @@ export function DataTable<TData, TValue>({
           </TableBody>
         </Table>
       </div>
-      <div className="flex items-center justify-end space-x-2 py-4">
-        <div className="flex-1 text-sm text-muted-foreground">
-          {table.getFilteredSelectedRowModel().rows.length} of{" "}
-          {table.getFilteredRowModel().rows.length} row(s) selected.
-        </div>
-
-        <div className="space-x-2">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => table.previousPage()}
-            disabled={!table.getCanPreviousPage()}
-          >
-            Previous
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => table.nextPage()}
-            disabled={!table.getCanNextPage()}
-          >
-            Next
-          </Button>
-        </div>
+      <div className="pt-2">
+        <DataTablePagination table={table} />
       </div>
     </div>
   );

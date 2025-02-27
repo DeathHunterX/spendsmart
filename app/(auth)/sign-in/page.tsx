@@ -3,8 +3,8 @@ import { SignInSchema } from "@/lib/validation";
 import { signInWithCredentials } from "@/lib/actions/auth/signIn.action";
 
 import AuthPageWrapper from "@/components/shared/wrapper/AuthPageWrapper";
-import SocialAuthForm from "@/components/shared/forms/SocialAuthForm";
-import AuthForm from "@/components/shared/forms/AuthForm";
+import SocialAuthForm from "@/components/shared/forms/auth/SocialAuthForm";
+import AuthForm from "@/components/shared/forms/auth/AuthForm";
 
 const SignInPage = () => {
   return (

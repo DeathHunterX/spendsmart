@@ -1,15 +1,10 @@
-import React from "react";
+import { SearchParams } from "@/types/global";
+import TransactionClientPage from "@/app/(private)/transactions/transactionClient";
 
-import { columns } from "@/components/shared/tables/Transactions/columns";
-import { DataTable } from "@/components/shared/tables/Transactions/data-table";
-import { data } from "@/data/TransactionData";
+const TransactionsPage = async ({ searchParams }: SearchParams) => {
+  const { fromDate, toDate, walletId } = await searchParams;
 
-const TransactionsPage = () => {
-  return (
-    <div className="container mx-auto h-full py-0">
-      <DataTable columns={columns} data={data} />
-    </div>
-  );
+  return <TransactionClientPage />;
 };
 
 export default TransactionsPage;

@@ -1,6 +1,3 @@
-import React from "react";
-import { useOpenWallet } from "../../hooks/use-open-wallet";
-
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -9,34 +6,33 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Edit, MoreHorizontal, Trash } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { deleteWallet } from "@/lib/actions/wallet.action";
-import { toast } from "@/hooks/use-toast";
 import { useConfirm } from "@/hooks/use-confirm";
+import { useFormModal } from "@/hooks/use-form-modal";
+import { useDeleteWallet } from "@/hooks/api/useWallet";
 
 interface Props {
   id: string;
 }
 
 const Actions = ({ id }: Props) => {
-  const { setType, onOpen } = useOpenWallet();
+  const { setType, onOpen, setTable } = useFormModal();
+  const deleteWalletMutation = useDeleteWallet(id);
+
   const [ConfirmationDialog, confirm] = useConfirm(
     "Are you sure?",
     "You are about to delete this transaction."
   );
+
   const handleEditWallet = () => {
-    setType("EDIT");
+    setType("update");
+    setTable("wallet");
     onOpen(id);
   };
 
   const handleDeleteWallet = async () => {
     const ok = await confirm();
     if (ok) {
-      const result = await deleteWallet({ walletId: id });
-      if (result?.success) {
-        toast({
-          title: "Delete wallet successfully ",
-        });
-      }
+      deleteWalletMutation.mutate(undefined);
     }
   };
 

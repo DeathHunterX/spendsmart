@@ -29,7 +29,10 @@ const AppSidebar = () => {
             <Image src="/logo-blue.svg" width={26} height={26} alt="Logo" />
           </div>
           <div className="grid flex-1 items-center text-left text-xl leading-tight text-blue-500">
-            <span className="truncate font-semibold"> SpendSmart</span>
+            <span className="truncate font-semibold flex items-end">
+              <p className="text-2xl">S</p>pend
+              <p className="text-2xl">S</p>mart
+            </span>
           </div>
         </div>
       </SidebarHeader>

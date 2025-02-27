@@ -1,8 +1,5 @@
 "use client";
 
-import React from "react";
-import { Wallet } from "@/types/global";
-import { useOpenWallet } from "../hooks/use-open-wallet";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 
@@ -11,11 +8,19 @@ import { deleteWalletBulk } from "@/lib/actions/wallet.action";
 import { toast } from "@/hooks/use-toast";
 import { DataTable } from "./table/data-table";
 
-const WalletClientPage = ({ data }: { data: Wallet[] }) => {
-  const { onOpen, setType } = useOpenWallet();
+import { useBulkDeleteWallet, useGetWallets } from "@/hooks/api/useWallet";
+import { useFormModal } from "@/hooks/use-form-modal";
+import { Wallet } from "@/types/global";
+
+const WalletClientPage = () => {
+  const { onOpen, setType, setTable } = useFormModal();
+
+  const walletQuery = useGetWallets();
+  const deleteWalletBulkMutation = useBulkDeleteWallet();
 
   const handleCreateWallet = () => {
-    setType("CREATE");
+    setType("create");
+    setTable("wallet");
     onOpen();
   };
   // TODO: Add skeleton component for this page
@@ -24,7 +29,7 @@ const WalletClientPage = ({ data }: { data: Wallet[] }) => {
       <div className="flex lg:flex-row justify-between lg:items-center">
         <h3 className="font-bold text-xl line-clamp-1 py-2">Wallet page</h3>
         <div className="">
-          <Button onClick={handleCreateWallet} className="">
+          <Button size="sm" onClick={handleCreateWallet}>
             <Plus className="w-4 h-4" />
             Add new
           </Button>
@@ -32,19 +37,12 @@ const WalletClientPage = ({ data }: { data: Wallet[] }) => {
       </div>
       <div className="">
         <DataTable
-          data={data}
+          data={walletQuery.data || []}
           columns={columns}
           filterKey="name"
           onDelete={async (row) => {
             const ids = row.map((r) => r.original.id);
-            // TODO: add delete wallet bulk
-            const result = await deleteWalletBulk({ ids });
-
-            if (result.success === true) {
-              toast({
-                title: "Delete wallet successfully ",
-              });
-            }
+            deleteWalletBulkMutation.mutate(ids);
           }}
           disabled={false}
         />

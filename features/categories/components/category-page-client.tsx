@@ -4,17 +4,17 @@ import { Category } from "@/types/global";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 
-import { useOpenCategory } from "../hooks/use-open-category";
 import { toast } from "@/hooks/use-toast";
 import { DataTable } from "./table/data-table";
 import { columns } from "./table/columns";
 import { deleteCategoryBulk } from "@/lib/actions/category.action";
+import { useFormModal } from "@/hooks/use-form-modal";
 
 const CategoryClientPage = ({ data }: { data: Category[] }) => {
-  const { onOpen, setType } = useOpenCategory();
-
+  const { onOpen, setType, setTable } = useFormModal();
   const handleCreateCategory = () => {
-    setType("CREATE");
+    setType("create");
+    setTable("category");
     onOpen();
   };
   // TODO: Add skeleton component for this page
@@ -23,7 +23,7 @@ const CategoryClientPage = ({ data }: { data: Category[] }) => {
       <div className="flex lg:flex-row justify-between lg:items-center">
         <h3 className="font-bold text-xl line-clamp-1 py-2">Category page</h3>
         <div className="">
-          <Button onClick={handleCreateCategory} className="">
+          <Button size="sm" onClick={handleCreateCategory}>
             <Plus className="w-4 h-4" />
             Add new
           </Button>

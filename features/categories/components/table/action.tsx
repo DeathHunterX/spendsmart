@@ -1,6 +1,3 @@
-import React from "react";
-import { useOpenCategory } from "../../hooks/use-open-category";
-
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -12,19 +9,21 @@ import { Button } from "@/components/ui/button";
 import { toast } from "@/hooks/use-toast";
 import { useConfirm } from "@/hooks/use-confirm";
 import { deleteCategory } from "@/lib/actions/category.action";
+import { useFormModal } from "@/hooks/use-form-modal";
 
 interface Props {
   id: string;
 }
 
 const Actions = ({ id }: Props) => {
-  const { setType, onOpen } = useOpenCategory();
+  const { setType, onOpen, setTable } = useFormModal();
   const [ConfirmationDialog, confirm] = useConfirm(
     "Are you sure?",
     "You are about to delete this transaction."
   );
-  const handleEditWallet = () => {
-    setType("EDIT");
+  const handleEditCategory = () => {
+    setType("update");
+    setTable("category");
     onOpen(id);
   };
 
@@ -34,7 +33,7 @@ const Actions = ({ id }: Props) => {
       const result = await deleteCategory({ categoryId: id });
       if (result?.success) {
         toast({
-          title: "Delete wallet successfully ",
+          title: "Delete category successfully ",
         });
       }
     }
@@ -51,7 +50,10 @@ const Actions = ({ id }: Props) => {
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
-          <DropdownMenuItem disabled={false} onClick={() => handleEditWallet()}>
+          <DropdownMenuItem
+            disabled={false}
+            onClick={() => handleEditCategory()}
+          >
             <Edit className="size-4 mr-2" />
             Edit
           </DropdownMenuItem>

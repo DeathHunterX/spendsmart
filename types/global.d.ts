@@ -38,6 +38,18 @@ interface Category {
   userId: string;
 }
 
+interface Transaction {
+  id: string;
+  amount: number;
+  payee: string;
+  notes?: string | null;
+  date: Date;
+  walletId: string;
+  categoryId?: string | null;
+  category?: string | null;
+  wallet?: string | null;
+}
+
 type ActionResponse<T = null> = {
   success: boolean;
   data?: T;
@@ -62,4 +74,8 @@ interface PaginatedSearchParams {
   query?: string;
   filter?: string;
   sort?: string;
+}
+
+interface SearchParams {
+  searchParams: Promise<{ [key: string]: string }>;
 }

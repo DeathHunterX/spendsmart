@@ -85,7 +85,7 @@ export function DataTable<TData, TValue>({
         />
         {table.getFilteredRowModel().rows.length > 0 && (
           <Button
-            disabled={disabled}
+            disabled={table.getFilteredSelectedRowModel().rows.length === 0}
             size="sm"
             variant="outline"
             className="ml-auto font-normal text-xs"
