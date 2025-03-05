@@ -137,11 +137,11 @@ export const useEditCategory = (id: string) => {
 };
 
 // Delete a wallet hook
-export const useDeleteCategory = (id: string) => {
+export const useDeleteCategory = () => {
   const queryClient = useQueryClient();
 
   const mutation = useMutation({
-    mutationFn: async () => {
+    mutationFn: async (id: string) => {
       const response = await deleteCategory({ categoryId: id });
 
       if (!response.success) {
@@ -171,11 +171,12 @@ export const useDeleteCategory = (id: string) => {
       });
     },
   });
+
   return mutation;
 };
 
 // Delete wallet bulk hook
-export const useBulkDeleteCategory = () => {
+export const useDeleteBulkCategory = () => {
   const queryClient = useQueryClient();
 
   const mutation = useMutation({

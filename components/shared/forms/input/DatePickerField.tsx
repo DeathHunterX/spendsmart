@@ -1,12 +1,11 @@
 import React, { InputHTMLAttributes } from "react";
 import {
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
-} from "../../ui/form";
+} from "../../../ui/form";
 
 import { useFormContext, FieldValues, Path } from "react-hook-form";
 import {
@@ -25,8 +24,6 @@ type DatePickerFieldProps<S extends FieldValues> = {
   nameInSchema: keyof S;
   label: string;
   placeholder?: string;
-  className?: string;
-  type?: string;
 } & InputHTMLAttributes<HTMLInputElement>;
 
 const DatePickerField = <S extends FieldValues>({

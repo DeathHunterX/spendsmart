@@ -51,6 +51,8 @@ const AppSidebar = () => {
                       asChild
                       tooltip={subItem.title}
                       isActive={pathname === subItem.url}
+                      disabled={true}
+                      aria-disabled={!subItem.isActive || !item.isActive}
                     >
                       <Link href={subItem.url}>
                         <Icon />

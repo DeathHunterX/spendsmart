@@ -1,27 +1,51 @@
 "use client";
-
-import { Category } from "@/types/global";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 
-import { toast } from "@/hooks/use-toast";
-import { DataTable } from "./table/data-table";
-import { columns } from "./table/columns";
-import { deleteCategoryBulk } from "@/lib/actions/category.action";
 import { useFormModal } from "@/hooks/use-form-modal";
+import {
+  useDeleteBulkCategory,
+  useGetCategories,
+} from "@/hooks/api/useCategory";
+import {
+  CategoryCard,
+  CategoryCardLoading,
+} from "@/components/shared/card/CategoryCard";
+import { Skeleton } from "@/components/ui/skeleton";
 
-const CategoryClientPage = ({ data }: { data: Category[] }) => {
+const CategoryClientPage = () => {
   const { onOpen, setType, setTable } = useFormModal();
+
+  const { data, isLoading } = useGetCategories();
+  const deleteBulkCategoryMutation = useDeleteBulkCategory();
+
   const handleCreateCategory = () => {
     setType("create");
     setTable("category");
     onOpen();
   };
-  // TODO: Add skeleton component for this page
+
+  if (isLoading) {
+    // TODO: Add skeleton component for this page
+    return (
+      <div className="max-w-screen-2xl mx-auto pb-10">
+        <div className="flex lg:flex-row justify-between lg:items-center items-center">
+          <h3 className="font-bold text-xl line-clamp-1 py-2">Categories</h3>
+
+          <Skeleton className="w-28 h-9" />
+        </div>
+        <div className="flex lg:flex-row flex-col gap-8 w-full mt-2">
+          <CategoryCardLoading />
+          <CategoryCardLoading />
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="max-w-screen-2xl mx-auto pb-10">
-      <div className="flex lg:flex-row justify-between lg:items-center">
-        <h3 className="font-bold text-xl line-clamp-1 py-2">Category page</h3>
+      <div className="flex lg:flex-row justify-between lg:items-center items-center">
+        <h3 className="font-bold text-xl line-clamp-1 py-2">Categories</h3>
         <div className="">
           <Button size="sm" onClick={handleCreateCategory}>
             <Plus className="w-4 h-4" />
@@ -29,23 +53,15 @@ const CategoryClientPage = ({ data }: { data: Category[] }) => {
           </Button>
         </div>
       </div>
-      <div className="">
-        <DataTable
-          data={data}
-          columns={columns}
-          filterKey="name"
-          onDelete={async (row) => {
-            const ids = row.map((r) => r.original.id);
-            // TODO: add delete category bulk
-            const result = await deleteCategoryBulk({ ids });
-
-            if (result.success === true) {
-              toast({
-                title: "Delete category successfully ",
-              });
-            }
-          }}
-          disabled={false}
+      <div className="flex lg:flex-row flex-col gap-8 w-full mt-4">
+        {/* //TODO: Add delete bulk categories */}
+        <CategoryCard
+          title="Income Categories"
+          data={data?.filter((item) => item?.type === "income") || []}
+        />
+        <CategoryCard
+          title="Expense Categories"
+          data={data?.filter((item) => item?.type === "expense") || []}
         />
       </div>
     </div>

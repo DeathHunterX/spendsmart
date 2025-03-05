@@ -1,5 +1,10 @@
 import { SearchParams } from "@/types/global";
 import TransactionClientPage from "@/app/(private)/transactions/transactionClient";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Transactions",
+};
 
 const TransactionsPage = async ({ searchParams }: SearchParams) => {
   const { fromDate, toDate, walletId } = await searchParams;

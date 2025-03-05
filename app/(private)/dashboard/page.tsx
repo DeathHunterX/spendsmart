@@ -1,14 +1,16 @@
-"use client";
+import DataGrid from "@/components/shared/DataGrid";
+import DataCharts from "@/components/shared/DataCharts";
+import { Metadata } from "next";
 
-import { useSession } from "next-auth/react";
+export const metadata: Metadata = {
+  title: "Dashboard",
+};
 
 const DashboardPage = () => {
-  const { data: session } = useSession();
-
   return (
-    <div>
-      <h1>DashboardPage</h1>
-      <p>{JSON.stringify(session)}</p>
+    <div className="max-w-screen-2xl mx-auto w-full pb-10">
+      <DataGrid />
+      <DataCharts />
     </div>
   );
 };

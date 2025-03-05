@@ -34,7 +34,8 @@ interface Wallet {
 interface Category {
   id: string;
   name: string;
-  description: string;
+  type: "income" | "expense";
+  icon?: string;
   userId: string;
 }
 

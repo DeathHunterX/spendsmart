@@ -34,7 +34,7 @@ const PrivateLayout = ({ children }: { children: React.ReactNode }) => {
               <Separator orientation="vertical" className="mr-2 h-4" />
               <Breadcrumbs />
             </div>
-            <div className=" hidden w-1/3 items-center gap-2 px-4 md:flex ">
+            <div className=" hidden w-1/3 items-center gap-2 px-4 md:flex">
               <SearchInput />
             </div>
             <div className="flex items-center gap-2 px-4">
@@ -43,7 +43,7 @@ const PrivateLayout = ({ children }: { children: React.ReactNode }) => {
             </div>
           </header>
           {/* page main content */}
-          <section className="pl-8 pr-4">{children}</section>
+          <section className="px-8">{children}</section>
         </SidebarInset>
       </SidebarProvider>
       <SheetProvider />

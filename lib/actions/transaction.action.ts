@@ -16,7 +16,7 @@ import {
   DeleteTransactionByIdSchema,
   EditTransactionByIdSchema,
   GetTransactionByIdSchema,
-  GetTransactionDataSchema,
+  FilteredSearchParamsSchema,
 } from "../validation";
 
 // Server action & response
@@ -31,11 +31,11 @@ import { parse, subDays } from "date-fns";
 import { revalidatePath } from "next/cache";
 
 export const getTransactionData = async (
-  params: GetTransactionDataParams
+  params: FilteredSearchParams
 ): Promise<ActionResponse<Transaction>> => {
   const validationResult = await action({
     params,
-    schema: GetTransactionDataSchema,
+    schema: FilteredSearchParamsSchema,
     authorize: true,
   });
 
@@ -85,7 +85,14 @@ export const getTransactionData = async (
       .select({
         id: transactions.id,
         date: transactions.date,
-        category: categories.name,
+        category: sql<string | null>`
+        CASE
+          WHEN ${categories.name} IS NULL AND ${categories.icon} IS NULL THEN NULL
+          WHEN ${categories.name} IS NOT NULL AND ${categories.icon} IS NULL THEN ${categories.name}
+          ELSE CONCAT(${categories.icon}, ' ', ${categories.name})
+        END
+      `,
+        categoryType: categories.type,
         categoryId: transactions.categoryId,
         payee: transactions.payee,
         amount: transactions.amount,

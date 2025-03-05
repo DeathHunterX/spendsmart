@@ -47,53 +47,53 @@ export const navMain = [
         isActive: true,
       },
       {
-        title: "Transfers",
-        url: "/transfers",
-        icon: "arrowLeftRight",
-        isActive: true,
-      },
-      {
         title: "Recurring",
         url: "/recurring",
         icon: "clock",
+        isActive: false,
+      },
+      {
+        title: "Budgets",
+        url: "/budgets",
+        icon: "calendar",
+        isActive: true,
+      },
+      {
+        title: "Wallets",
+        url: "/wallets",
+        icon: "wallet",
+        isActive: true,
+      },
+      {
+        title: "Categories",
+        url: "/categories",
+        icon: "target",
         isActive: true,
       },
     ],
   },
   {
     title: "Analysis",
-    isActive: true,
+    isActive: false,
     items: [
       {
         title: "Spending Analysis",
         url: "/analysis/spending",
         icon: "pieChart",
-        isActive: true,
+        isActive: false,
       },
       {
         title: "Income Tracking",
         url: "/analysis/income",
         icon: "lineChart",
-        isActive: true,
-      },
-      {
-        title: "Categories",
-        url: "/categories",
-        icon: "tags",
-        isActive: true,
+        isActive: false,
       },
     ],
   },
   {
     title: "Planning",
-    isActive: true,
+    isActive: false,
     items: [
-      {
-        title: "Budget Planner",
-        url: "/budget-planner",
-        icon: "calendar",
-        isActive: true,
-      },
       {
         title: "Saving Goals",
         url: "/saving-goals",
@@ -111,31 +111,12 @@ export const navMain = [
 
   {
     title: "Reports",
-    isActive: true,
+    isActive: false,
     items: [
       {
         title: "Monthly Report",
         url: "/report",
         icon: "fileText",
-        isActive: true,
-      },
-    ],
-  },
-
-  {
-    title: "Settings",
-    isActive: true,
-    items: [
-      {
-        title: "Wallet",
-        url: "/wallets",
-        icon: "wallet",
-        isActive: true,
-      },
-      {
-        title: "Categories",
-        url: "/categories",
-        icon: "target",
         isActive: true,
       },
     ],

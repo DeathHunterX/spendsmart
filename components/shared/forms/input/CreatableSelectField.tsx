@@ -5,7 +5,7 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "../../ui/form";
+} from "../../../ui/form";
 import { useFormContext, FieldValues, Path } from "react-hook-form";
 import { CreatableSelect } from "@/components/custom-ui/creatable-select";
 

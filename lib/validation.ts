@@ -79,7 +79,8 @@ export const DeleteWalletByIdSchema = z.object({
 
 export const CreateCategorySchema = z.object({
   name: z.string().min(1, { message: "Wallet name is required." }),
-  description: z.string().optional(),
+  type: z.enum(["income", "expense"]),
+  icon: z.string(),
 });
 
 export const GetCategoryByIdSchema = z.object({
@@ -112,7 +113,7 @@ export const PaginatedSearchParamsSchema = z.object({
  * ===============================================================================
  */
 
-export const GetTransactionDataSchema = z.object({
+export const FilteredSearchParamsSchema = z.object({
   fromDate: z.string().optional(),
   toDate: z.string().optional(),
   walletId: z.string().optional(),

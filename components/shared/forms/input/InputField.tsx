@@ -5,8 +5,8 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "../../ui/form";
-import { Input } from "../../ui/input";
+} from "../../../ui/form";
+import { Input } from "../../../ui/input";
 import { useFormContext, FieldValues, Path } from "react-hook-form";
 
 type InputFieldProps<S extends FieldValues> = {

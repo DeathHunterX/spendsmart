@@ -13,7 +13,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useSearchParams } from "next/navigation";
 import { toast } from "../use-toast";
 import { Transaction } from "@/types/global";
-import { convertAmountFromMiliunits } from "@/lib/utils";
+import { convertAmountFromMiliUnits } from "@/lib/utils";
 
 // Get transaction data hooks
 export const useGetTransactions = () => {
@@ -33,7 +33,7 @@ export const useGetTransactions = () => {
         // Apply the transformation logic (customize as needed)
         return {
           ...data,
-          amount: convertAmountFromMiliunits(data?.amount),
+          amount: convertAmountFromMiliUnits(data?.amount),
         };
       };
 
@@ -74,7 +74,7 @@ export const useGetTransactionById = (
         // Apply the transformation logic (customize as needed)
         return {
           ...data,
-          amount: convertAmountFromMiliunits(data.amount),
+          amount: convertAmountFromMiliUnits(data.amount),
         };
       };
 

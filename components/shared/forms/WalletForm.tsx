@@ -10,7 +10,7 @@ import { Form } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 
 import { CreateWalletSchema } from "@/lib/validation";
-import InputField from "../input/InputField";
+import InputField from "./input/InputField";
 
 import { useCreateWallet, useEditWallet } from "@/hooks/api/useWallet";
 
@@ -63,7 +63,7 @@ const WalletForm = ({
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="mt-3 space-y-6">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
         <InputField nameInSchema="name" label="Name" />
         <InputField nameInSchema="description" label="Description" />
         <InputField nameInSchema="initialBalance" label="Initial Balance" />

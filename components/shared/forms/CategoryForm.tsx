@@ -8,11 +8,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Form } from "@/components/ui/form";
 
 import { Button } from "@/components/ui/button";
-import { toast } from "@/hooks/use-toast";
 import { CreateCategorySchema } from "@/lib/validation";
-import InputField from "../input/InputField";
-
-import { addCategory, editCategory } from "@/lib/actions/category.action";
+import InputField from "./input/InputField";
+import { useCreateCategory, useEditCategory } from "@/hooks/api/useCategory";
+import IconInputField from "./input/IconInputField";
+import SelectInputField from "./input/SelectInputField";
 
 const CategoryForm = ({
   type,
@@ -31,51 +31,52 @@ const CategoryForm = ({
     resolver: zodResolver(CreateCategorySchema),
     defaultValues: {
       name: type === "update" ? data?.name || "" : "",
-      description: type === "update" ? data?.description || "" : "",
+      type: type === "update" ? data?.type || "income" : "income",
+      icon: type === "update" ? data?.icon || "" : "",
     },
   });
 
+  const addCategoryMutation = useCreateCategory();
+  const editCategoryMutation =
+    type === "update" && id ? useEditCategory(id) : undefined;
+
   const onSubmit = async (values: z.infer<typeof CreateCategorySchema>) => {
     if (type === "update" && id) {
-      const response = await editCategory({ ...values, categoryId: id });
-      if (response.success) {
-        toast({
-          title: "Success",
-          description: "Category updated successfully",
-        });
-      } else {
-        toast({
-          title: `Error ${response.status}`,
-          description: response.error?.message || "Something went wrong",
-          variant: "destructive",
-        });
-      }
+      editCategoryMutation?.mutate(
+        { ...values, categoryId: id },
+        {
+          onSuccess: () => {
+            onClose();
+          },
+        }
+      );
     } else {
-      const response = await addCategory(values);
-      if (response.success) {
-        toast({
-          title: "Success",
-          description: "Category created successfully",
-        });
-      } else {
-        toast({
-          title: `Error ${response.status}`,
-          description: response.error?.message || "Something went wrong",
-          variant: "destructive",
-        });
-      }
+      addCategoryMutation.mutate(values, {
+        onSuccess: () => {
+          onClose();
+        },
+      });
     }
-
-    onClose();
   };
 
   const buttonText = type === "create" ? "Create category" : "Save changes";
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="mt-3 space-y-6">
-        <InputField nameInSchema="name" label="Name" />
-        <InputField nameInSchema="description" label="Description" />
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+        <div className="flex flex-row gap-x-4">
+          <InputField nameInSchema="name" label="Name" />
+          <SelectInputField
+            nameInSchema="type"
+            label="Type"
+            data={[
+              { name: "Income", value: "income" },
+              { name: "Expense", value: "expense" },
+            ]}
+          />
+        </div>
+
+        <IconInputField nameInSchema="icon" label="Icon" />
 
         <Button
           disabled={form.formState.isSubmitting}

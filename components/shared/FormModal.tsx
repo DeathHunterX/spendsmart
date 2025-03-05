@@ -1,12 +1,13 @@
 "use client";
 
 import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
-} from "../ui/sheet";
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
 import { useFormModal } from "@/hooks/use-form-modal";
 import dynamic from "next/dynamic";
@@ -87,18 +88,15 @@ const FormModal = ({
   };
   return (
     <>
-      <Sheet open={isOpen} onOpenChange={onClose}>
-        <SheetContent
-          side="right"
-          className="overflow-y-auto w-full lg:max-w-md"
-        >
-          <SheetHeader className="pb-2">
-            <SheetTitle>{title}</SheetTitle>
-            <SheetDescription>{description}</SheetDescription>
-          </SheetHeader>
+      <Dialog open={isOpen} onOpenChange={onClose}>
+        <DialogContent className="lg:min-w-[40vw] lg:max-w-md">
+          <DialogHeader className="pb-2">
+            <DialogTitle>{title}</DialogTitle>
+            <DialogDescription>{description}</DialogDescription>
+          </DialogHeader>
           <Form />
-        </SheetContent>
-      </Sheet>
+        </DialogContent>
+      </Dialog>
     </>
   );
 };

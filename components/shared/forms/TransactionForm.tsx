@@ -8,11 +8,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Form } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 
-import CreatableSelectField from "../input/CreatableSelectField";
-import DatePickerField from "../input/DatePickerField";
-import TextAreaField from "../input/TextareaField";
-import CurrencyAmountField from "../input/CurrencyAmountField";
-import InputField from "../input/InputField";
+import CreatableSelectField from "./input/CreatableSelectField";
+import DatePickerField from "./input/DatePickerField";
+import TextAreaField from "./input/TextareaField";
+import CurrencyAmountField from "./input/CurrencyAmountField";
+import InputField from "./input/InputField";
 
 import { Category, Wallet } from "@/types/global";
 
@@ -94,10 +94,19 @@ const TransactionForm = ({
 
   const { categoryList, walletList } = relatedData;
 
-  const categoryOptions = (categoryList ?? []).map((category: Category) => ({
-    label: category.name,
-    value: category.id,
-  }));
+  const categoryOptions = (categoryList ?? [])
+    .filter((category: Category) => {
+      const amount = form.watch("amount");
+      if (amount > 0) return category.type === "income";
+      if (amount < 0) return category.type === "expense";
+      return true; // For neutral amount (e.g., 0), show all categories
+    })
+    .map((category: Category) => ({
+      label: category.icon
+        ? `${category?.icon} ${category?.name}`
+        : category.name,
+      value: category.id,
+    }));
 
   const walletOptions = (walletList ?? []).map((wallet: Wallet) => ({
     label: wallet.name,
@@ -105,7 +114,8 @@ const TransactionForm = ({
   }));
 
   const handleCreateCategory = async (name: string) => {
-    createCategoryMutation.mutate({ name });
+    // TODO: handle create category form
+    // createCategoryMutation.mutate({ name });
   };
 
   const handleCreateWallet = async (name: string) => {
@@ -116,7 +126,7 @@ const TransactionForm = ({
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="mt-3 space-y-4">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
         <CreatableSelectField
           nameInSchema="walletId"
           label="Wallet"
@@ -130,19 +140,19 @@ const TransactionForm = ({
           label="Amount"
           placeholder="0.00"
         />
-        <CreatableSelectField
-          nameInSchema="categoryId"
-          label="Category"
-          placeholder="Select a category"
-          options={categoryOptions}
-          onCreate={handleCreateCategory}
-          disable={form.formState.isSubmitting}
-        />
+        <div className="flex flex-row gap-x-4">
+          <CreatableSelectField
+            nameInSchema="categoryId"
+            label={`Categories (${form.watch("amount") > 0 ? "income" : form.watch("amount") < 0 ? "expense" : "all"})`}
+            placeholder="Select a category"
+            options={categoryOptions}
+            onCreate={handleCreateCategory}
+            disable={form.formState.isSubmitting}
+          />
+          <DatePickerField nameInSchema="date" label="Transaction date" />
+        </div>
         <InputField nameInSchema="payee" label="Payee" />
         <TextAreaField nameInSchema="notes" label="Notes" />
-
-        <DatePickerField nameInSchema="date" label="Transaction date" />
-
         <Button
           disabled={form.formState.isSubmitting}
           className="paragraph-medium min-h-12 w-full rounded-lg bg-blue-500 px-4 py-3 hover:bg-blue-400"

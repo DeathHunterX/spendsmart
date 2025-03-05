@@ -4,7 +4,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Edit, MoreHorizontal, Trash } from "lucide-react";
+import { Edit, Eye, MoreHorizontal, Trash } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 import { useConfirm } from "@/hooks/use-confirm";
@@ -48,6 +48,10 @@ const Actions = ({ id }: Props) => {
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
+          <DropdownMenuItem>
+            <Eye className="size-4 mr-2" />
+            More detail
+          </DropdownMenuItem>
           <DropdownMenuItem
             disabled={false}
             onClick={() => handleEditTransaction()}

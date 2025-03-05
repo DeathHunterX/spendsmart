@@ -89,26 +89,24 @@ const TransactionClientPage = () => {
 
   if (transactionQuery.isLoading) {
     return (
-      <div className="">
-        <div className="max-w-screen-2xl mx-auto pb-10">
-          <div className="flex lg:flex-row justify-between lg:items-center">
-            <h3 className="font-bold text-xl line-clamp-1 py-2">
-              Transaction History
-            </h3>
-            <div className="flex flex-row">
-              <Skeleton className="w-[100px] h-[44px] rounded mr-4" />
+      <div className="max-w-screen-2xl mx-auto pb-10">
+        <div className="flex lg:flex-row justify-between lg:items-center">
+          <h3 className="font-bold text-xl line-clamp-1 py-2">
+            Transaction History
+          </h3>
+          <div className="flex flex-row">
+            <Skeleton className="w-[100px] h-[44px] rounded mr-4" />
 
-              <Skeleton className="w-[100px] h-[44px] rounded" />
-            </div>
+            <Skeleton className="w-[100px] h-[44px] rounded" />
           </div>
-          <div className="">
-            <div className="flex flex-row justify-between items-center py-8">
-              <Skeleton className="w-[100px] h-[44px] rounded" />
-              <Skeleton className="w-[100px] h-[44px] rounded" />
-            </div>
-            <div className="h-[250px] w-full flex items-center justify-center">
-              <Loader2 className="size-6 text-slate-300 animate-spin" />
-            </div>
+        </div>
+        <div className="">
+          <div className="flex flex-row justify-between items-center py-8">
+            <Skeleton className="w-[100px] h-[44px] rounded" />
+            <Skeleton className="w-[100px] h-[44px] rounded" />
+          </div>
+          <div className="h-[250px] w-full flex items-center justify-center">
+            <Loader2 className="size-6 text-slate-300 animate-spin" />
           </div>
         </div>
       </div>
@@ -135,7 +133,7 @@ const TransactionClientPage = () => {
             </Button>
           </div>
         </div>
-        <div className="">
+        <div className="relative">
           <DataTable
             data={transactionQuery.data || []}
             columns={columns}

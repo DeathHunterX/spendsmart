@@ -188,6 +188,10 @@ export const columns: ColumnDef<Transaction>[] = [
   {
     id: "actions",
     enableHiding: false,
-    cell: ({ row }) => <Actions id={row.original.id} />,
+    cell: ({ row }) => (
+      <div className="sticky top-0 right-0 z-10">
+        <Actions id={row.original.id} />
+      </div>
+    ),
   },
 ];

@@ -40,7 +40,8 @@ export const addCategory = async (
     params,
     schema: insertCategorySchema.pick({
       name: true,
-      description: true,
+      type: true,
+      icon: true,
     }),
     authorize: true,
   });
@@ -49,7 +50,7 @@ export const addCategory = async (
     return handleError(validationResult) as ErrorResponse;
   }
 
-  const { name, description } = validationResult.params!;
+  const { name, type, icon } = validationResult.params!;
   const userId = validationResult?.session?.user?.id!;
 
   try {
@@ -57,7 +58,8 @@ export const addCategory = async (
       .insert(categories)
       .values({
         name,
-        description,
+        type,
+        icon,
         userId,
       })
       .returning();
@@ -183,7 +185,7 @@ export const editCategory = async (
     return handleError(validationResult) as ErrorResponse;
   }
 
-  const { categoryId, name, description } = validationResult.params!;
+  const { categoryId, name, type, icon } = validationResult.params!;
   const userId = validationResult.session?.user?.id!;
 
   try {
@@ -191,7 +193,8 @@ export const editCategory = async (
       .update(categories)
       .set({
         ...(name && { name }),
-        ...(description && { description }),
+        ...(type && { type }),
+        ...(icon && { icon }),
       })
       .where(and(eq(categories.id, categoryId), eq(categories.userId, userId)))
       .returning();

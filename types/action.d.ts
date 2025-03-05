@@ -44,7 +44,8 @@ interface DeleteWalletByIdParams {
 
 interface CreateCategoryParams {
   name: string;
-  description?: string;
+  type: "income" | "expense";
+  icon: string;
 }
 
 interface GetCategoriesByUserParams {
@@ -73,7 +74,7 @@ interface DeleteCategoryByIdParams {
 // * ===============================================================================
 // *
 
-interface GetTransactionDataParams {
+interface FilteredSearchParams {
   fromDate?: string;
   toDate?: string;
   walletId?: string;

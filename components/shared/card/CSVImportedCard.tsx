@@ -144,7 +144,6 @@ const CSVImportedCard = ({
       }
     });
 
-    console.log({ arrayOfData, formattedData });
     onSubmit(formattedData, selectValue.current ?? "");
   };
 
