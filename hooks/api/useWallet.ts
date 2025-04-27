@@ -80,7 +80,7 @@ export const useCreateWallet = () => {
       });
       queryClient.invalidateQueries({ queryKey: ["wallets"] });
       queryClient.invalidateQueries({ queryKey: ["transactions"] });
-      // queryClient.invalidateQueries({ queryKey: ["summary"] });
+      queryClient.invalidateQueries({ queryKey: ["summary"] });
     },
     onError: (error: any) => {
       const [status, errorMessage] = error.message.split(":");
@@ -120,7 +120,7 @@ export const useEditWallet = (id: string) => {
       queryClient.invalidateQueries({ queryKey: ["wallet", { id }] });
       queryClient.invalidateQueries({ queryKey: ["wallets"] });
       queryClient.invalidateQueries({ queryKey: ["transactions"] });
-      // queryClient.invalidateQueries({ queryKey: ["summary"] });
+      queryClient.invalidateQueries({ queryKey: ["summary"] });
     },
     onError: (error: any) => {
       const [status, errorMessage] = error.message.split(":");
@@ -158,7 +158,7 @@ export const useDeleteWallet = (id: string) => {
         description: "Wallet deleted successfully",
       });
       queryClient.invalidateQueries({ queryKey: ["wallets"] });
-      // queryClient.invalidateQueries({ queryKey: ["summary"] });
+      queryClient.invalidateQueries({ queryKey: ["summary"] });
     },
     onError: (error: any) => {
       const [status, errorMessage] = error.message.split(":");
@@ -196,7 +196,7 @@ export const useBulkDeleteWallet = () => {
         description: "All selected wallets deleted successfully",
       });
       queryClient.invalidateQueries({ queryKey: ["wallets"] });
-      // queryClient.invalidateQueries({ queryKey: ["summary"] });
+      queryClient.invalidateQueries({ queryKey: ["summary"] });
     },
     onError: (error: any) => {
       const [status, errorMessage] = error.message.split(":");

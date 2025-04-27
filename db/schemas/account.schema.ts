@@ -10,8 +10,9 @@ import { v7 as uuidv7 } from "uuid";
 
 import { users } from "./user.schema";
 import { createSelectSchema } from "drizzle-zod";
-import { InferSelectModel } from "drizzle-orm";
+import { InferSelectModel, relations } from "drizzle-orm";
 
+// Tables
 export const accounts = pgTable(
   "account",
   {
@@ -52,7 +53,15 @@ export const verificationTokens = pgTable(
   })
 );
 
-// Zod schema
+// Relations
+export const accountRelation = relations(accounts, ({ one }) => ({
+  users: one(users, {
+    fields: [accounts.userId],
+    references: [users.id],
+  }),
+}));
+
+// Schemas
 export const getAccountSchema = createSelectSchema(accounts);
 
 export type Account = InferSelectModel<typeof accounts>;

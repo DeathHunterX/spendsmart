@@ -2,7 +2,7 @@
 
 import { useGetSummary } from "@/hooks/api/useSummary";
 import { formatDateRange } from "@/lib/utils";
-import { PiggyBank, TrendingDown, TrendingUp } from "lucide-react";
+import { PiggyBank, TrendingDown, TrendingUp, Wallet2 } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 import { DataCard, DataCardLoading } from "./DataCard";
 
@@ -20,7 +20,8 @@ const DataGrid = () => {
 
   if (isLoading) {
     return (
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 pb-2 mb-4">
+      <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 pb-2 mb-4">
+        <DataCardLoading />
         <DataCardLoading />
         <DataCardLoading />
         <DataCardLoading />
@@ -29,9 +30,27 @@ const DataGrid = () => {
   }
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 pb-2 mb-4">
+    <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 pb-2 mb-4">
       <DataCard
-        title="Income"
+        title="Total Balance"
+        value={data?.walletData?.reduce(
+          (sum: any, item: any) => sum + item.balance,
+          0
+        )}
+        icon={Wallet2}
+        variant="default"
+        dateRange={dateRangeLabel}
+      />
+      <DataCard
+        title="Total Period Change"
+        value={data?.remainingAmount}
+        percentageChange={data?.remainingChange}
+        icon={PiggyBank}
+        variant="default"
+        dateRange={dateRangeLabel}
+      />
+      <DataCard
+        title="Total Period Income"
         value={data?.incomeAmount}
         percentageChange={data?.incomeChange}
         icon={TrendingUp}
@@ -39,18 +58,10 @@ const DataGrid = () => {
         dateRange={dateRangeLabel}
       />
       <DataCard
-        title="Expense"
+        title="Total Period Expense"
         value={data?.expenseAmount}
         percentageChange={data?.expenseChange}
         icon={TrendingDown}
-        variant="default"
-        dateRange={dateRangeLabel}
-      />
-      <DataCard
-        title="Remaining"
-        value={data?.remainingAmount}
-        percentageChange={data?.remainingChange}
-        icon={PiggyBank}
         variant="default"
         dateRange={dateRangeLabel}
       />

@@ -145,9 +145,10 @@ export const columns: ColumnDef<Transaction>[] = [
       );
     },
     cell: ({ row }) => {
-      const formattedCurrency = formatCurrency(
-        parseFloat(row.getValue("amount"))
-      );
+      const formattedCurrency = formatCurrency({
+        value: parseFloat(row.getValue("amount")),
+        fractionDigits: 2,
+      });
 
       return (
         <div className="font-medium text-right px-4">{formattedCurrency}</div>

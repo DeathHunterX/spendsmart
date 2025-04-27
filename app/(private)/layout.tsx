@@ -43,7 +43,7 @@ const PrivateLayout = ({ children }: { children: React.ReactNode }) => {
             </div>
           </header>
           {/* page main content */}
-          <section className="px-8">{children}</section>
+          <section className="px-8 h-full mt-3">{children}</section>
         </SidebarInset>
       </SidebarProvider>
       <SheetProvider />

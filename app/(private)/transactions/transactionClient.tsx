@@ -11,7 +11,7 @@ import { Loader2, Plus } from "lucide-react";
 import { DataTable } from "./_components/(table)/data-table";
 import { columns } from "./_components/(table)/columns/columns";
 
-import { useFormModal } from "@/hooks/use-form-modal";
+import { formModalStore } from "@/stores";
 import {
   useBulkDeleteTransaction,
   useCreateBulkTransactions,
@@ -36,7 +36,7 @@ const TransactionClientPage = () => {
   const [importResults, setImportResults] = useState(INITIAL_IMPORT_RESULTS);
 
   // Hooks
-  const { onOpen, setType, setTable } = useFormModal();
+  const { onOpen, setType, setTable } = formModalStore();
   const transactionQuery = useGetTransactions();
   const createTransactionsMutation = useCreateBulkTransactions();
   const transactionBulkDeleteMutation = useBulkDeleteTransaction();

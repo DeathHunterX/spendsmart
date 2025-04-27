@@ -1,18 +1,23 @@
 "use server";
 
 import { db } from "@/db/drizzle";
-import { eq, and, gte, lte, desc, sql, sum, lt } from "drizzle-orm";
-import { transactions, categories, wallets } from "@/db/schemas";
+import { eq, and, gte, lte, desc, sql, sum, lt, or, isNull } from "drizzle-orm";
+import { transactions, categories, wallets, savingGoals } from "@/db/schemas";
 
 import action from "../handlers/action";
 import { FilteredSearchParamsSchema } from "../validation";
 
-import { ActionResponse, ErrorResponse } from "@/types/global";
+import {
+  ActionResponse,
+  ErrorResponse,
+  FilteredSearchParams,
+} from "@/types/global";
 import handleError from "../handlers/error";
 
 import { differenceInDays, parse, subDays } from "date-fns";
 
 import { calculatePercentageChange, fillMissingDays } from "../utils";
+import { revalidatePath } from "next/cache";
 
 export const getSummaryData = async (
   params: FilteredSearchParams
@@ -92,6 +97,7 @@ export const getSummaryData = async (
     lastPeriod.remaining
   );
 
+  // Summarize value for each categories
   const category = await db
     .select({
       name: categories.name,
@@ -123,6 +129,7 @@ export const getSummaryData = async (
     finalCategories.push({ name: "Other", value: otherSum });
   }
 
+  // Get data for each days
   const activeDays = await db
     .select({
       date: transactions.date,
@@ -150,6 +157,86 @@ export const getSummaryData = async (
 
   const days = fillMissingDays(activeDays, startDate, endDate);
 
+  // Transaction history
+  const transactionData = await db
+    .select({
+      id: transactions.id,
+      date: transactions.date,
+      category: sql<string | null>`
+        CASE
+          WHEN ${categories.name} IS NULL AND ${categories.icon} IS NULL THEN NULL
+          WHEN ${categories.name} IS NOT NULL AND ${categories.icon} IS NULL THEN ${categories.name}
+          ELSE CONCAT(${categories.icon}, ' ', ${categories.name})
+        END
+      `,
+      categoryType: categories.categoryType,
+      categoryId: transactions.categoryId,
+      payee: transactions.payee,
+      amount: transactions.amount,
+      notes: transactions.notes,
+      wallet: wallets.name,
+      walletId: transactions.walletId,
+    })
+    .from(transactions)
+    .innerJoin(wallets, eq(transactions.walletId, wallets.id))
+    .leftJoin(categories, eq(transactions.categoryId, categories.id))
+    .where(
+      and(
+        walletId ? eq(transactions.walletId, walletId) : undefined,
+        eq(wallets.userId, userId),
+        gte(transactions.date, startDate),
+        lte(transactions.date, endDate)
+      )
+    )
+    .orderBy(desc(transactions.date))
+    .limit(5);
+
+  // Saving Goals
+  const top4ClosestSavingGoal = await db
+    .select({
+      name: savingGoals.name,
+      savedAmount: savingGoals.savedAmount,
+      targetAmount: savingGoals.targetAmount,
+      difference:
+        sql`ABS(${savingGoals.savedAmount} - ${savingGoals.targetAmount})`.mapWith(
+          Number
+        ),
+    })
+    .from(savingGoals)
+    .where(eq(savingGoals.userId, userId))
+    .orderBy(
+      sql`ABS(${savingGoals.savedAmount} - ${savingGoals.targetAmount})`.mapWith(
+        Number
+      )
+    )
+    .limit(4);
+
+  // Total balance for wallet
+  const walletData = await db
+    .select({
+      name: wallets.name,
+      balance:
+        sql`${wallets.initialBalance} + COALESCE(SUM(${transactions.amount}), 0) AS total_amount`.mapWith(
+          Number
+        ),
+    })
+    .from(wallets)
+    .leftJoin(transactions, eq(wallets.id, transactions.walletId))
+    .where(
+      and(
+        walletId ? eq(transactions.walletId, walletId) : undefined,
+        eq(wallets.userId, userId),
+        or(
+          isNull(transactions.id), // No transaction exists for this wallet
+          and(
+            gte(transactions.date, startDate),
+            lte(transactions.date, endDate)
+          )
+        )
+      )
+    )
+    .groupBy(wallets.id);
+
   const data = {
     remainingAmount: currentPeriod.remaining,
     remainingChange,
@@ -159,7 +246,13 @@ export const getSummaryData = async (
     expenseChange,
     categories: finalCategories,
     days,
+    // budget
+    transactionHistory: transactionData,
+    top4SavingGoals: top4ClosestSavingGoal,
+    walletData,
   };
+
+  revalidatePath("/dashboard");
 
   return { success: true, data: JSON.parse(JSON.stringify(data)) };
 };

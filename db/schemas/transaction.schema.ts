@@ -6,6 +6,7 @@ import { relations } from "drizzle-orm";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
+// Tables
 export const transactions = pgTable("transactions", {
   id: text("id")
     .primaryKey()
@@ -24,6 +25,7 @@ export const transactions = pgTable("transactions", {
   }),
 });
 
+// Relations
 export const transactionsRelations = relations(transactions, ({ one }) => ({
   wallet: one(wallets, {
     fields: [transactions.walletId],
@@ -35,6 +37,7 @@ export const transactionsRelations = relations(transactions, ({ one }) => ({
   }),
 }));
 
+// Schemas
 export const insertTransactionSchema = createInsertSchema(transactions, {
   date: z.coerce.date(),
 });

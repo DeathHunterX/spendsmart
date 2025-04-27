@@ -57,7 +57,10 @@ const RadialVariant = ({ data }: Props) => {
                         {entry.value}
                       </span>
                       <span className="text-sm">
-                        {formatCurrency(entry.payload.value)}
+                        {formatCurrency({
+                          value: entry.payload.value,
+                          fractionDigits: 2,
+                        })}
                       </span>
                     </div>
                   </li>

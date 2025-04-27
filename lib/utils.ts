@@ -14,11 +14,17 @@ export function convertAmountToMiliunits(amount: number) {
   return Math.round(amount * 1000);
 }
 
-export function formatCurrency(value: number) {
+export function formatCurrency({
+  value,
+  fractionDigits = 0,
+}: {
+  value: number;
+  fractionDigits?: number;
+}) {
   return Intl.NumberFormat("en-US", {
     style: "currency",
     currency: "USD",
-    minimumFractionDigits: 2,
+    minimumFractionDigits: fractionDigits,
   }).format(value);
 }
 
@@ -87,10 +93,14 @@ export function formatDateRange(period?: Period) {
 
 export function formatPercentage(
   value: number,
-  options: { addPrefix?: boolean } = { addPrefix: false }
+  options: { addPrefix?: boolean; minimumFractionDigits?: number } = {
+    addPrefix: false,
+    minimumFractionDigits: 0,
+  }
 ) {
   const result = new Intl.NumberFormat("en-US", {
     style: "percent",
+    minimumFractionDigits: options.minimumFractionDigits,
   }).format(value / 100);
 
   if (options.addPrefix && value > 0) {
@@ -98,4 +108,26 @@ export function formatPercentage(
   }
 
   return result;
+}
+
+export function calculateSavingsPredictions(
+  targetAmount: number,
+  savedAmount: number,
+  deadline: Date
+) {
+  const today = new Date();
+  const timeRemaining =
+    (new Date(deadline).getTime() - today.getTime()) / (1000 * 60 * 60 * 24); // Time remaining in days
+
+  // Avoid division by zero or negative time
+  const dailySavings =
+    timeRemaining > 0 ? (targetAmount - savedAmount) / timeRemaining : 0;
+  const weeklySavings = timeRemaining > 0 ? dailySavings * 7 : 0;
+  const monthlySavings = timeRemaining > 0 ? dailySavings * 30 : 0;
+
+  return {
+    dailySavings: isFinite(dailySavings) ? dailySavings : 0,
+    weeklySavings: isFinite(weeklySavings) ? weeklySavings : 0,
+    monthlySavings: isFinite(monthlySavings) ? monthlySavings : 0,
+  };
 }

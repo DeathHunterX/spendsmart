@@ -1,13 +1,14 @@
-import React, { InputHTMLAttributes } from "react";
+import { InputHTMLAttributes, useState } from "react";
+import { useFormContext, FieldValues, Path } from "react-hook-form";
+
 import {
   FormControl,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
-} from "../../../ui/form";
+} from "@/components/ui/form";
 
-import { useFormContext, FieldValues, Path } from "react-hook-form";
 import {
   Popover,
   PopoverContent,
@@ -24,13 +25,17 @@ type DatePickerFieldProps<S extends FieldValues> = {
   nameInSchema: keyof S;
   label: string;
   placeholder?: string;
+  isDateLimited?: boolean;
 } & InputHTMLAttributes<HTMLInputElement>;
 
 const DatePickerField = <S extends FieldValues>({
   nameInSchema,
   label,
   placeholder,
+  isDateLimited = true,
 }: DatePickerFieldProps<S>) => {
+  const [isCalendarOpen, setIsCalendarOpen] = useState<boolean>(false);
+
   const form = useFormContext<S>();
 
   return (
@@ -42,7 +47,7 @@ const DatePickerField = <S extends FieldValues>({
           <FormLabel className="paragraph-small flex items-start">
             {label}
           </FormLabel>
-          <Popover modal={true}>
+          <Popover modal open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
             <PopoverTrigger asChild>
               <FormControl>
                 <Button
@@ -65,9 +70,13 @@ const DatePickerField = <S extends FieldValues>({
               <Calendar
                 mode="single"
                 selected={field.value}
-                onSelect={field.onChange}
+                onSelect={(e) => {
+                  field.onChange(e);
+                  setIsCalendarOpen(false);
+                }}
                 disabled={(date) =>
-                  date > new Date() || date < new Date("1900-01-01")
+                  (isDateLimited ? date > new Date() : date < new Date()) ||
+                  date < new Date("1900-01-01")
                 }
                 initialFocus
               />

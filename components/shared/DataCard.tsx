@@ -1,4 +1,4 @@
-import { LucideIcon, TrendingUp } from "lucide-react";
+import { ChevronRight, LucideIcon } from "lucide-react";
 import { VariantProps, cva } from "class-variance-authority";
 
 import { cn, formatCurrency, formatPercentage } from "@/lib/utils";
@@ -6,6 +6,7 @@ import {
   Card,
   CardContent,
   CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle,
 } from "../ui/card";
@@ -15,7 +16,7 @@ import { Skeleton } from "../ui/skeleton";
 
 type Icon = LucideIcon;
 
-const boxVariant = cva("shrink-0 rounded-md p-3", {
+const boxVariant = cva("shrink-0 rounded-md p-2.5", {
   variants: {
     variant: {
       default: "bg-blue-500/20",
@@ -41,7 +42,7 @@ type BoxVariants = VariantProps<typeof boxVariant>;
 interface DataCardProps extends BoxVariants {
   title: string;
   value?: number;
-  percentageChange: number;
+  percentageChange?: number;
   icon: Icon;
   dateRange: string;
 }
@@ -59,7 +60,7 @@ export const DataCard = ({
     <Card className="">
       <CardHeader className="flex flex-row items-center justify-between gap-x-4">
         <div className="space-y-1">
-          <CardTitle className="text-xl line-clamp-1">{title}</CardTitle>
+          <CardTitle className="text-base line-clamp-1">{title}</CardTitle>
           <CardDescription className="line-clamp-1">
             {dateRange}
           </CardDescription>
@@ -70,30 +71,37 @@ export const DataCard = ({
             color={iconColors[variant || "default"]}
             strokeWidth={2}
             className=""
+            size={20}
           />
         </div>
       </CardHeader>
-      <CardContent>
-        <h1 className="font-bold text-xl mb-1 line-clamp-1 break-all">
-          <CountUp
-            preserveValue
-            start={0}
-            end={value}
-            decimals={2}
-            decimalPlaces={2}
-            formattingFn={formatCurrency}
-          />
-        </h1>
-        <small
-          className={cn(
-            "text-muted-foreground line-clamp-1",
-            percentageChange > 0 && "text-emerald-500",
-            percentageChange < 0 && "text-rose-500"
+      <CardContent className="flex flex-row justify-between items-end relative">
+        <div className="">
+          <h1 className="font-bold text-xl mb-1 line-clamp-1 break-all">
+            <CountUp
+              preserveValue
+              start={0}
+              end={value}
+              decimals={2}
+              decimalPlaces={2}
+              formattingFn={(n) =>
+                formatCurrency({ value: n, fractionDigits: 2 })
+              }
+            />
+          </h1>
+          {percentageChange && (
+            <small
+              className={cn(
+                "text-muted-foreground line-clamp-1",
+                percentageChange > 0 && "text-emerald-500",
+                percentageChange < 0 && "text-rose-500"
+              )}
+            >
+              {formatPercentage(percentageChange, { addPrefix: true })} from
+              last period
+            </small>
           )}
-        >
-          {formatPercentage(percentageChange, { addPrefix: true })} from last
-          period
-        </small>
+        </div>
       </CardContent>
     </Card>
   );

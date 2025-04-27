@@ -20,7 +20,7 @@ const CategoryTooltip = ({ active, payload }: any) => {
             <p className="text-sm text-muted-foreground">Expenses</p>
           </div>
           <p className="text-sm text-right font-medium">
-            {formatCurrency(value * -1)}
+            {formatCurrency({ value: value * -1, fractionDigits: 2 })}
           </p>
         </div>
       </div>

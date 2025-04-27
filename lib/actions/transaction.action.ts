@@ -24,7 +24,12 @@ import action from "../handlers/action";
 import handleError from "../handlers/error";
 
 // Types
-import { ActionResponse, ErrorResponse, Transaction } from "@/types/global";
+import {
+  ActionResponse,
+  ErrorResponse,
+  FilteredSearchParams,
+  Transaction,
+} from "@/types/global";
 
 // Other
 import { parse, subDays } from "date-fns";
@@ -92,7 +97,7 @@ export const getTransactionData = async (
           ELSE CONCAT(${categories.icon}, ' ', ${categories.name})
         END
       `,
-        categoryType: categories.type,
+        categoryType: categories.categoryType,
         categoryId: transactions.categoryId,
         payee: transactions.payee,
         amount: transactions.amount,

@@ -74,16 +74,6 @@ interface DeleteCategoryByIdParams {
 // * ===============================================================================
 // *
 
-interface FilteredSearchParams {
-  fromDate?: string;
-  toDate?: string;
-  walletId?: string;
-}
-
-interface GetTransactionByIdParams {
-  transactionId: string;
-}
-
 interface CreateTransactionParams {
   amount: number;
   payee: string;
@@ -91,6 +81,10 @@ interface CreateTransactionParams {
   date: Date;
   walletId: string;
   categoryId?: string | null;
+}
+
+interface GetTransactionByIdParams {
+  transactionId: string;
 }
 
 interface EditTransactionByIdParams extends CreateTransactionParams {
@@ -104,3 +98,63 @@ interface DeleteTransactionBulkParams {
 interface DeleteTransactionByIdParams {
   transactionId: string;
 }
+
+// *
+// * ===============================================================================
+// * Saving Goal Params
+// * ===============================================================================
+// *
+
+interface CreateSavingGoalParams {
+  coverType: "icon" | "photo";
+  coverImg: string;
+  name: string;
+  notes?: string;
+  targetAmount: number;
+  deadline: Date;
+  status: "active" | "completed" | "cancelled";
+}
+
+interface GetSavingGoalByIdParams {
+  goalId: string;
+}
+
+interface EditSavingGoalParams extends CreateSavingGoalParams {
+  goalId: string;
+}
+
+interface DeleteSavingGoalParams {
+  goalId: string;
+}
+
+// *
+// * ===============================================================================
+// * Saving Record Params
+// * ===============================================================================
+// *
+
+interface CreateSavingRecordParams {
+  amount: number;
+  recordType: "savings" | "withdrawals";
+  date: Date;
+  notes: string;
+  goalId: string;
+}
+
+interface GetSavingRecordByIdParams {
+  recordId: string;
+}
+
+interface EditSavingRecordParams extends CreateSavingRecordParams {
+  recordId: string;
+}
+
+interface DeleteSavingRecordParams {
+  recordId: string;
+}
+
+// *
+// * ===============================================================================
+// * Budget Params
+// * ===============================================================================
+// *

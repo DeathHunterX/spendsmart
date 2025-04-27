@@ -10,6 +10,7 @@ import {
   SelectValue,
   SelectItem,
 } from "@/components/ui/select";
+
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 import { Skeleton } from "@/components/ui/skeleton";
@@ -32,9 +33,11 @@ export const SpendingPie = ({ data = [] }: Props) => {
   };
 
   return (
-    <Card className="border-none drop-shadow-sm">
+    <Card className="drop-shadow-sm">
       <CardHeader className="flex space-y-2 lg:space-y-0 lg:flex-row lg:items-center justify-between">
-        <CardTitle className="text-xl line-clamp-1">Categories</CardTitle>
+        <CardTitle className="text-lg line-clamp-1">
+          Expense Breakdown
+        </CardTitle>
         <Select defaultValue={chartType} onValueChange={onChartTypeChange}>
           <SelectTrigger className="lg:w-auto h-9 rounded-md px-3">
             <SelectValue placeholder="Chart Type" />
@@ -83,7 +86,7 @@ export const SpendingPie = ({ data = [] }: Props) => {
 
 export const SpendingPieLoading = () => {
   return (
-    <Card className="border-none drop-shadow-sm">
+    <Card className="drop-shadow-sm">
       <CardHeader className="flex space-y-2 lg:space-y-0 lg:flex-row lg:items-center justify-between">
         <Skeleton className="h-8 w-48" />
         <Skeleton className="h-8 lg:w-[120px] w-full" />

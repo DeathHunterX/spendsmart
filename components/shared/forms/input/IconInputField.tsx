@@ -1,4 +1,4 @@
-import React, { InputHTMLAttributes } from "react";
+import React, { InputHTMLAttributes, useState } from "react";
 import {
   FormControl,
   FormDescription,
@@ -34,6 +34,7 @@ const IconInputField = <S extends FieldValues>({
 }: InputFieldProps<S>) => {
   const form = useFormContext<S>();
   const theme = useTheme();
+  const [isEmojiOpen, setIsEmojiOpen] = useState<boolean>(false);
 
   const isMobile = useIsMobile();
   return (
@@ -45,7 +46,7 @@ const IconInputField = <S extends FieldValues>({
           <FormItem>
             <FormLabel>{label}</FormLabel>
             <FormControl>
-              <Popover modal>
+              <Popover modal open={isEmojiOpen} onOpenChange={setIsEmojiOpen}>
                 <PopoverTrigger asChild>
                   <Button variant={"outline"} className="h-[100px] w-full">
                     {form.watch(nameInSchema as Path<S>) ? (
@@ -71,13 +72,13 @@ const IconInputField = <S extends FieldValues>({
                   className="w-full border-none bg-inherit shadow-none p-0 md:mr-3"
                   side={isMobile ? "bottom" : "left"}
                 >
-                  {/* <p>Hello</p> */}
                   <Picker
                     data={data}
                     // theme={theme.resolvedTheme}
                     previewPosition="bottom"
                     onEmojiSelect={(emoji: { native: string }) => {
                       field.onChange(emoji.native);
+                      setIsEmojiOpen(false);
                     }}
                     skinTonePosition="none"
                   />

@@ -10,7 +10,7 @@ import {
 import { Skeleton } from "@/components/ui/skeleton";
 import { useDeleteCategory } from "@/hooks/api/useCategory";
 import { useConfirm } from "@/hooks/use-confirm";
-import { useFormModal } from "@/hooks/use-form-modal";
+import { formModalStore } from "@/stores";
 import { cn } from "@/lib/utils";
 
 import { Category } from "@/types/global";
@@ -24,7 +24,7 @@ interface CategoryCardProps {
 }
 
 export const CategoryCard = ({ title, data }: CategoryCardProps) => {
-  const { setType, onOpen, setTable } = useFormModal();
+  const { setType, onOpen, setTable } = formModalStore();
   const deleteCategoryMutation = useDeleteCategory();
 
   const [ConfirmationDialog, confirm] = useConfirm(
@@ -94,7 +94,7 @@ export const CategoryCard = ({ title, data }: CategoryCardProps) => {
               ))}
             </ul>
           ) : (
-            <div className="flex flex-col justify-center items-center w-full h-fit">
+            <div className="flex flex-col justify-center items-center w-full h-fit pb-8">
               <Image
                 width="150"
                 height="150"

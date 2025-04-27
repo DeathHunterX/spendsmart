@@ -1,4 +1,4 @@
-import { useFormModal } from "@/hooks/use-form-modal";
+import { formModalStore } from "@/stores";
 
 type Props = {
   wallet: string | null;
@@ -6,7 +6,7 @@ type Props = {
 };
 
 export const WalletColumn = ({ wallet, walletId }: Props) => {
-  const { onOpen, setType, setTable } = useFormModal();
+  const { onOpen, setType, setTable } = formModalStore();
 
   const onClick = () => {
     setType("update");

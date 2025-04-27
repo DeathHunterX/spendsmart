@@ -7,7 +7,7 @@ import {
 import { Edit, MoreHorizontal, Trash } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useConfirm } from "@/hooks/use-confirm";
-import { useFormModal } from "@/hooks/use-form-modal";
+import { formModalStore } from "@/stores";
 import { useDeleteWallet } from "@/hooks/api/useWallet";
 
 interface Props {
@@ -15,7 +15,7 @@ interface Props {
 }
 
 const Actions = ({ id }: Props) => {
-  const { setType, onOpen, setTable } = useFormModal();
+  const { setType, onOpen, setTable } = formModalStore();
   const deleteWalletMutation = useDeleteWallet(id);
 
   const [ConfirmationDialog, confirm] = useConfirm(

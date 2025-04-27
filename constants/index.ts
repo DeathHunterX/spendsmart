@@ -92,7 +92,7 @@ export const navMain = [
   },
   {
     title: "Planning",
-    isActive: false,
+    isActive: true,
     items: [
       {
         title: "Saving Goals",
@@ -104,7 +104,7 @@ export const navMain = [
         title: "Wishlist",
         url: "/wishlist",
         icon: "gift",
-        isActive: true,
+        isActive: false,
       },
     ],
   },
@@ -150,3 +150,5 @@ export const settingsDropdown = [
     icon: "localization",
   },
 ];
+
+export const MAX_DATE_RANGE_DAYS = 90;

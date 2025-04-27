@@ -23,7 +23,7 @@ const ChartTooltip = ({ active, payload }: any) => {
             <p className="text-sm text-muted-foreground">Income</p>
           </div>
           <p className="text-sm text-right font-medium">
-            {formatCurrency(income)}
+            {formatCurrency({ value: income, fractionDigits: 2 })}
           </p>
         </div>
         <div className="flex items-center gap-x-2">
@@ -32,7 +32,7 @@ const ChartTooltip = ({ active, payload }: any) => {
             <p className="text-sm text-muted-foreground">Expenses</p>
           </div>
           <p className="text-sm text-right font-medium">
-            {formatCurrency(expenses * -1)}
+            {formatCurrency({ value: expenses * -1, fractionDigits: 2 })}
           </p>
         </div>
       </div>

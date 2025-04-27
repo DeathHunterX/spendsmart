@@ -1,7 +1,7 @@
 import { TriangleAlert } from "lucide-react";
 
 import { cn } from "@/lib/utils";
-import { useFormModal } from "@/hooks/use-form-modal";
+import { formModalStore } from "@/stores";
 
 type Props = {
   id: string;
@@ -10,7 +10,7 @@ type Props = {
 };
 
 export const CategoryColumn = ({ id, category, categoryId }: Props) => {
-  const { onOpen, setType, setTable } = useFormModal();
+  const { onOpen, setType, setTable } = formModalStore();
 
   const onClick = () => {
     if (categoryId) {

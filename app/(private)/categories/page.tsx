@@ -1,4 +1,4 @@
-import CategoryClientPage from "@/features/categories/components/category-page-client";
+import CategoryClientPage from "./CategoryClient";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {

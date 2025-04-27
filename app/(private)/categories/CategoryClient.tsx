@@ -2,7 +2,7 @@
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 
-import { useFormModal } from "@/hooks/use-form-modal";
+import { formModalStore } from "@/stores";
 import {
   useDeleteBulkCategory,
   useGetCategories,
@@ -14,7 +14,7 @@ import {
 import { Skeleton } from "@/components/ui/skeleton";
 
 const CategoryClientPage = () => {
-  const { onOpen, setType, setTable } = useFormModal();
+  const { onOpen, setType, setTable } = formModalStore();
 
   const { data, isLoading } = useGetCategories();
   const deleteBulkCategoryMutation = useDeleteBulkCategory();
@@ -57,11 +57,11 @@ const CategoryClientPage = () => {
         {/* //TODO: Add delete bulk categories */}
         <CategoryCard
           title="Income Categories"
-          data={data?.filter((item) => item?.type === "income") || []}
+          data={data?.filter((item) => item?.categoryType === "income") || []}
         />
         <CategoryCard
           title="Expense Categories"
-          data={data?.filter((item) => item?.type === "expense") || []}
+          data={data?.filter((item) => item?.categoryType === "expense") || []}
         />
       </div>
     </div>

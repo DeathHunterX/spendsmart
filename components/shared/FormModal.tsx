@@ -6,10 +6,11 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 
-import { useFormModal } from "@/hooks/use-form-modal";
+import { formModalStore } from "@/stores";
+import { TableType } from "@/stores/type";
+
 import dynamic from "next/dynamic";
 
 const WalletForm = dynamic(() => import("./forms/WalletForm"), {
@@ -21,6 +22,10 @@ const CategoryForm = dynamic(() => import("./forms/CategoryForm"), {
 });
 
 const TransactionForm = dynamic(() => import("./forms/TransactionForm"), {
+  loading: () => <h1>Loading...</h1>,
+});
+
+const SavingGoalForm = dynamic(() => import("./forms/SavingGoalForm"), {
   loading: () => <h1>Loading...</h1>,
 });
 
@@ -60,6 +65,15 @@ const forms: {
       relatedData={relatedData}
     />
   ),
+  saving: (type, onClose, id, data, relatedData) => (
+    <SavingGoalForm
+      id={id}
+      type={type}
+      onClose={onClose}
+      data={data}
+      relatedData={relatedData}
+    />
+  ),
 };
 
 const FormModal = ({
@@ -71,7 +85,7 @@ const FormModal = ({
   title,
   description,
 }: {
-  table: "wallet" | "category" | "transaction";
+  table: TableType;
   type: "create" | "update" | "delete";
   data?: any;
   relatedData?: any;
@@ -79,7 +93,7 @@ const FormModal = ({
   title?: string;
   description?: string;
 }) => {
-  const { isOpen, onClose } = useFormModal();
+  const { isOpen, onClose } = formModalStore();
 
   const Form = () => {
     return type === "create" || type === "update"
@@ -89,7 +103,10 @@ const FormModal = ({
   return (
     <>
       <Dialog open={isOpen} onOpenChange={onClose}>
-        <DialogContent className="lg:min-w-[40vw] lg:max-w-md">
+        <DialogContent
+          className="lg:min-w-[40vw] lg:max-w-md"
+          onOpenAutoFocus={(e) => e.preventDefault()}
+        >
           <DialogHeader className="pb-2">
             <DialogTitle>{title}</DialogTitle>
             <DialogDescription>{description}</DialogDescription>

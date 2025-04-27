@@ -10,14 +10,14 @@ import { Button } from "@/components/ui/button";
 import { useConfirm } from "@/hooks/use-confirm";
 
 import { useDeleteTransaction } from "@/hooks/api/useTransaction";
-import { useFormModal } from "@/hooks/use-form-modal";
+import { formModalStore } from "@/stores";
 
 interface Props {
   id: string;
 }
 
 const Actions = ({ id }: Props) => {
-  const { setType, onOpen, setTable } = useFormModal();
+  const { setType, onOpen, setTable } = formModalStore();
   const deleteTransactionMutation = useDeleteTransaction(id);
 
   const [ConfirmationDialog, confirm] = useConfirm(

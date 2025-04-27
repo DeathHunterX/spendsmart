@@ -9,11 +9,11 @@ import { toast } from "@/hooks/use-toast";
 import { DataTable } from "./table/data-table";
 
 import { useBulkDeleteWallet, useGetWallets } from "@/hooks/api/useWallet";
-import { useFormModal } from "@/hooks/use-form-modal";
+import { formModalStore } from "@/stores";
 import { Wallet } from "@/types/global";
 
 const WalletClientPage = () => {
-  const { onOpen, setType, setTable } = useFormModal();
+  const { onOpen, setType, setTable } = formModalStore();
 
   const walletQuery = useGetWallets();
   const deleteWalletBulkMutation = useBulkDeleteWallet();

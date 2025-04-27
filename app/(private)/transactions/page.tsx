@@ -1,5 +1,5 @@
 import { SearchParams } from "@/types/global";
-import TransactionClientPage from "@/app/(private)/transactions/transactionClient";
+import TransactionClientPage from "./transactionClient";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {

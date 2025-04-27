@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 
 const Navbar = () => {
   return (
-    <nav className="flex-between fixed z-50 w-full gap-5 bg-gradient-to-b from-blue-700 to-blue-500 px-8 py-4">
+    <nav className="flex-between sticky z-50 w-full gap-5 bg-gradient-to-b from-blue-700 to-blue-500 px-8 py-4">
       <div className="flex flex-row gap-16">
         <NavbarLogo />
         <div className="flex flex-row gap-5">

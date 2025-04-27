@@ -51,6 +51,37 @@ interface Transaction {
   wallet?: string | null;
 }
 
+interface SavingGoal {
+  id: string;
+  coverType: "icon" | "photo";
+  coverImg: string;
+  name: string;
+  notes?: string;
+  savedAmount: number;
+  targetAmount: number;
+  deadline: Date;
+  status: "active" | "completed" | "cancelled";
+  userId: string;
+  records?: SavingRecord[];
+}
+
+interface SavingRecord {
+  id: string;
+  amount: number;
+  recordType: "savings" | "withdrawals";
+  date: Date;
+  notes: string;
+  goalId: string;
+}
+
+interface Budget {
+  id: string;
+  walletId: string;
+  categoryId: string;
+  period: "day" | "week" | "month" | "quarter" | "year" | "overtime";
+  amount: number;
+}
+
 type ActionResponse<T = null> = {
   success: boolean;
   data?: T;
@@ -75,6 +106,12 @@ interface PaginatedSearchParams {
   query?: string;
   filter?: string;
   sort?: string;
+}
+
+interface FilteredSearchParams {
+  fromDate?: string;
+  toDate?: string;
+  walletId?: string;
 }
 
 interface SearchParams {

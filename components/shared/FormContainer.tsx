@@ -1,11 +1,12 @@
 "use client";
 
 import FormModal from "./FormModal";
-import { useFormModal } from "@/hooks/use-form-modal";
+import { formModalStore } from "@/stores";
 import { useGetWalletById, useGetWallets } from "@/hooks/api/useWallet";
 import { useGetCategories, useGetCategoryById } from "@/hooks/api/useCategory";
 import { UseQueryResult } from "@tanstack/react-query";
 import { useGetTransactionById } from "@/hooks/api/useTransaction";
+import { useGetSavingGoalById } from "@/hooks/api/useSavingGoal";
 
 const titleDescriptionMap = {
   wallet: {
@@ -35,13 +36,38 @@ const titleDescriptionMap = {
         "Make changes to your category. Click save when you're done.",
     },
   },
+  saving: {
+    create: {
+      title: "New Saving Goal",
+      description: "Add your saving goal here.",
+    },
+    update: {
+      title: "Edit Saving Goal",
+      description:
+        "Make changes to your saving goal. Click save when you're done.",
+    },
+  },
+  budget: {
+    create: { title: "New Budget", description: "Add your budget here." },
+    update: {
+      title: "Edit Budget",
+      description: "Make changes to your budget. Click save when you're done.",
+    },
+  },
+  recurring: {
+    create: { title: "New Category", description: "Add your category here." },
+    update: {
+      title: "Edit Category",
+      description:
+        "Make changes to your category. Click save when you're done.",
+    },
+  },
 };
 
 const FormContainer = () => {
-  const { table, type, id } = useFormModal();
+  const { table, type, id } = formModalStore();
   const isUpdate = type === "update";
 
-  // Always call primary query hooks but control their behavior with 'enabled'
   const walletQuery = useGetWalletById(id ?? "", {
     enabled: table === "wallet" && isUpdate && !!id,
   });
@@ -52,19 +78,25 @@ const FormContainer = () => {
     enabled: table === "transaction" && isUpdate && !!id,
   });
 
-  const categoryListQuery = useGetCategories();
-  const walletListQuery = useGetWallets();
+  const savingGoalQuery = useGetSavingGoalById(id ?? "", {
+    enabled: table === "saving" && isUpdate && !!id,
+  });
 
   // Primary query results (only wallet or category)
   const primaryQueryResults: {
     wallet: UseQueryResult<any>;
     category: UseQueryResult<any>;
     transaction: UseQueryResult<any>;
+    saving: UseQueryResult<any>;
   } = {
     wallet: walletQuery,
     category: categoryQuery,
     transaction: transactionQuery,
+    saving: savingGoalQuery,
   };
+
+  const categoryListQuery = useGetCategories();
+  const walletListQuery = useGetWallets();
 
   // Map related query results
   const relatedQueryResults = {
@@ -84,7 +116,10 @@ const FormContainer = () => {
 
   // Safely access primary query data and loading state based on the table type
   const primaryResult =
-    table === "wallet" || table === "category" || table === "transaction"
+    table === "wallet" ||
+    table === "category" ||
+    table === "transaction" ||
+    table === "saving"
       ? primaryQueryResults[table]
       : null;
 

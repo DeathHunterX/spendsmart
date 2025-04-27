@@ -42,6 +42,12 @@ export const SignUpSchema = z.object({
     }),
 });
 
+export const FilteredSearchParamsSchema = z.object({
+  fromDate: z.string().optional(),
+  toDate: z.string().optional(),
+  walletId: z.string().optional(),
+});
+
 /**
  * ===============================================================================
  * Wallet Schema
@@ -113,12 +119,6 @@ export const PaginatedSearchParamsSchema = z.object({
  * ===============================================================================
  */
 
-export const FilteredSearchParamsSchema = z.object({
-  fromDate: z.string().optional(),
-  toDate: z.string().optional(),
-  walletId: z.string().optional(),
-});
-
 export const GetTransactionByIdSchema = z.object({
   transactionId: z.string(),
 });
@@ -142,4 +142,85 @@ export const DeleteTransactionByIdSchema = z.object({
 
 export const DeleteTransactionBulkSchema = z.object({
   transactionIds: z.array(z.string()),
+});
+
+/**
+ * ===============================================================================
+ * Saving Goal Schema
+ * ===============================================================================
+ */
+
+export const CreateSavingGoalSchema = z.object({
+  coverType: z.enum(["icon", "photo"], {
+    message: "Only icon and photo type are required",
+  }),
+  coverImg: z.string(),
+  name: z.string().min(1, { message: "Name is required" }),
+  notes: z.string().optional(),
+  targetAmount: z.number().gte(0, { message: "Amount is required" }),
+  deadline: z.coerce.date({ message: "Deadline is required" }),
+  status: z.enum(["active", "completed", "cancelled"], {
+    message: "Only active, completed and cancelled type are required",
+  }),
+});
+
+export const GetSavingGoalByIdSchema = z.object({
+  goalId: z.string(),
+});
+
+export const EditSavingGoalSchema = CreateSavingGoalSchema.extend({
+  goalId: z.string(),
+});
+
+export const DeleteSavingGoalSchema = z.object({
+  goalId: z.string(),
+});
+
+/**
+ * ===============================================================================
+ * Saving Record Schema
+ * ===============================================================================
+ */
+
+export const CreateSavingRecordSchema = z.object({
+  amount: z.number().gt(0, { message: "Amount is required" }),
+  recordType: z.enum(["savings", "withdrawals"], {
+    message: "Savings or Withdrawals type only",
+  }),
+  date: z.coerce.date({ message: "Date is required" }),
+  notes: z.string(),
+  // goalId: z.string().min(10, { message: "Goal Id is required" }),
+});
+
+export const GetSavingRecordByIdSchema = z.object({
+  recordId: z.string(),
+});
+
+export const EditSavingRecordSchema = CreateSavingRecordSchema.extend({
+  recordId: z.string(),
+});
+
+export const DeleteSavingRecordSchema = z.object({
+  recordId: z.string(),
+});
+
+/**
+ * ===============================================================================
+ * Budget Schema
+ * ===============================================================================
+ */
+
+export const CreateBudgetSchema = z.object({
+  walletId: z.string(),
+  categoryId: z.string(),
+  period: z.enum(["day", "week", "month", "quarter", "year", "overtime"]),
+  amount: z.number(),
+});
+
+export const EditBudgetSchema = CreateBudgetSchema.extend({
+  budgetId: z.string(),
+});
+
+export const DeleteBudgetSchema = z.object({
+  budgetId: z.string(),
 });

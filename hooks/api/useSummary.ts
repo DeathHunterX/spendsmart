@@ -1,6 +1,7 @@
 import { getSummaryData } from "@/lib/actions/summary.action";
 import { RequestError } from "@/lib/http-error";
 import { convertAmountFromMiliUnits } from "@/lib/utils";
+import { Transaction } from "@/types/global";
 import { useQuery } from "@tanstack/react-query";
 import { useSearchParams } from "next/navigation";
 
@@ -41,6 +42,21 @@ export const useGetSummary = () => {
             expense: convertAmountFromMiliUnits(day.expense),
           })
         ),
+        transactionHistory: response.data.transactionHistory.map(
+          (data: Transaction) => ({
+            ...data,
+            amount: convertAmountFromMiliUnits(data.amount),
+          })
+        ),
+        top4SavingGoals: response.data?.top4SavingGoals.map((data: any) => ({
+          ...data,
+          savedAmount: convertAmountFromMiliUnits(data.savedAmount),
+          targetAmount: convertAmountFromMiliUnits(data.targetAmount),
+        })),
+        walletData: response.data.walletData.map((data: any) => ({
+          ...data,
+          balance: convertAmountFromMiliUnits(data.balance),
+        })),
       };
     },
   });

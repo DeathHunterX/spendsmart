@@ -1,6 +1,7 @@
-import { RequestError } from "@/lib/http-error";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "../use-toast";
+
+// Actions
 import {
   addCategory,
   deleteCategory,
@@ -10,7 +11,10 @@ import {
   getCategoryData,
 } from "@/lib/actions/category.action";
 
-// Get all wallet data hook
+// Error
+import { RequestError } from "@/lib/http-error";
+
+// Get all category data hook
 export const useGetCategories = () => {
   const query = useQuery({
     queryKey: ["categories"],
@@ -33,7 +37,7 @@ export const useGetCategories = () => {
   return query;
 };
 
-// Get wallet data by id hook
+// Get category data by id hook
 export const useGetCategoryById = (
   id: string,
   options?: { enabled?: boolean }
@@ -56,7 +60,7 @@ export const useGetCategoryById = (
   return query;
 };
 
-// Create a wallet hook
+// Create a category hook
 export const useCreateCategory = () => {
   const queryClient = useQueryClient();
 
@@ -80,7 +84,7 @@ export const useCreateCategory = () => {
       });
       queryClient.invalidateQueries({ queryKey: ["categories"] });
       queryClient.invalidateQueries({ queryKey: ["transactions"] });
-      // queryClient.invalidateQueries({ queryKey: ["summary"] });
+      queryClient.invalidateQueries({ queryKey: ["summary"] });
     },
     onError: (error: any) => {
       const [status, errorMessage] = error.message.split(":");
@@ -120,7 +124,7 @@ export const useEditCategory = (id: string) => {
       queryClient.invalidateQueries({ queryKey: ["category", { id }] });
       queryClient.invalidateQueries({ queryKey: ["categories"] });
       queryClient.invalidateQueries({ queryKey: ["transactions"] });
-      // queryClient.invalidateQueries({ queryKey: ["summary"] });
+      queryClient.invalidateQueries({ queryKey: ["summary"] });
     },
     onError: (error: any) => {
       const [status, errorMessage] = error.message.split(":");
@@ -159,7 +163,8 @@ export const useDeleteCategory = () => {
         description: "Category deleted successfully",
       });
       queryClient.invalidateQueries({ queryKey: ["categories"] });
-      // queryClient.invalidateQueries({ queryKey: ["summary"] });
+      queryClient.invalidateQueries({ queryKey: ["transactions"] });
+      queryClient.invalidateQueries({ queryKey: ["summary"] });
     },
     onError: (error: any) => {
       const [status, errorMessage] = error.message.split(":");
@@ -198,7 +203,8 @@ export const useDeleteBulkCategory = () => {
         description: "All selected categories deleted successfully",
       });
       queryClient.invalidateQueries({ queryKey: ["categories"] });
-      // queryClient.invalidateQueries({ queryKey: ["summary"] });
+      queryClient.invalidateQueries({ queryKey: ["transactions"] });
+      queryClient.invalidateQueries({ queryKey: ["summary"] });
     },
     onError: (error: any) => {
       const [status, errorMessage] = error.message.split(":");

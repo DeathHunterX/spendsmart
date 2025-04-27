@@ -7,6 +7,7 @@ import { v7 as uuidv7 } from "uuid";
 // Other Schemas
 import { users } from "./user.schema";
 import { transactions } from "./transaction.schema";
+import { walletToBudgets } from "./budget.schema";
 
 export const wallets = pgTable("wallet", {
   id: text("id")
@@ -23,6 +24,11 @@ export const wallets = pgTable("wallet", {
 export const insertWalletSchema = createInsertSchema(wallets);
 export const selectWalletSchema = createSelectSchema(wallets);
 
-export const walletsRelation = relations(wallets, ({ many }) => ({
+export const walletsRelation = relations(wallets, ({ one, many }) => ({
   transactions: many(transactions),
+  walletsToBudgets: many(walletToBudgets),
+  users: one(users, {
+    fields: [wallets.userId],
+    references: [users.id],
+  }),
 }));
